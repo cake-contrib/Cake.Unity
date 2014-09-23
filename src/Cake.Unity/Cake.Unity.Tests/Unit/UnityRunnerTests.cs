@@ -77,6 +77,21 @@ namespace Cake.Unity.Tests.Unit
             }
 
             [Fact]
+            public void Should_Throw_If_Unity_Is_Not_Installed()
+            {
+                // Given
+                var fixture = new UnityRunnerFixture();
+                fixture.DefaultToolPathExist = false;
+
+                // When
+                var result = Record.Exception(() => fixture.ExecuteRunner());
+
+                // Then
+                Assert.IsType<CakeException>(result);
+                Assert.Equal("Unity: Could not locate executable.", result.Message);
+            }
+
+            [Fact]
             public void Should_Set_Default_Arguments()
             {
                 // Given

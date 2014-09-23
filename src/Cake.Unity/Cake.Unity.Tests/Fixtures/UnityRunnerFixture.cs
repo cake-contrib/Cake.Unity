@@ -20,14 +20,17 @@ namespace Cake.Unity.Tests.Fixtures
         public DirectoryPath ProjectPath { get; set; }
         public IUnityPlatform Platform { get; set; }
 
+        public bool DefaultToolPathExist { get; set; }
         public bool ProjectPathExist { get; set; }
 
         public UnityRunnerFixture()
         {
             Context = Substitute.For<ICakeContext>();
-            ProjectPath = new DirectoryPath("C:/Project");
-            ProjectPathExist = true;
+            ProjectPath = new DirectoryPath("C:/Project");            
             Platform = Substitute.For<IUnityPlatform>();
+
+            DefaultToolPathExist = true;
+            ProjectPathExist = true;
 
             Process = Substitute.For<IProcess>();
             Process.GetExitCode().Returns(0);
@@ -40,8 +43,8 @@ namespace Cake.Unity.Tests.Fixtures
             Environment.GetSpecialPath(Arg.Is(SpecialPath.ProgramFilesX86)).Returns("C:/Program Files (x86)");
 
             FileSystem = Substitute.For<IFileSystem>();
-            FileSystem.Exist(Arg.Is<FilePath>(a => a.FullPath == "C:/Program Files (x86)/Unity/Editor/Unity.exe")).Returns(true);
-            FileSystem.Exist(Arg.Is<DirectoryPath>(a => ProjectPath != null && a.FullPath == ProjectPath.FullPath)).Returns((c) => ProjectPathExist);
+            FileSystem.Exist(Arg.Is<FilePath>(a => a.FullPath == "C:/Program Files (x86)/Unity/Editor/Unity.exe")).Returns(c => DefaultToolPathExist);
+            FileSystem.Exist(Arg.Is<DirectoryPath>(a => ProjectPath != null && a.FullPath == ProjectPath.FullPath)).Returns(c => ProjectPathExist);
         }
 
         public void ExecuteRunner()
