@@ -20,10 +20,12 @@ Task("Build")
 	var outputPath = @"C:\Output\Game.exe";
 
 	// Build for Windows (x86)
-	Unity(projectPath, new WindowsPlatform(outputPath) { NoGraphics = true });
+	UnityBuild(projectPath, new WindowsPlatform(outputPath) { 
+		NoGraphics = true });
 
 	// Build for Windows (x64)
-	Unity(projectPath, new WindowsPlatform(true, outputPath) { NoGraphics = true });
+	UnityBuild(projectPath, new WindowsPlatform(true, outputPath) { 
+		PlatformTarget = UnityPlatformTarget.x64 });
 });
 
 RunTarget("Build");

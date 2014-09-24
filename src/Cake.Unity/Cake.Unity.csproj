@@ -45,6 +45,7 @@
     <Compile Include="Platforms\WindowsPlatform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnityExtensions.cs" />
+    <Compile Include="UnityPlatformTarget.cs" />
     <Compile Include="UnityRunner.cs" />
     <Compile Include="IUnityPlatform.cs" />
   </ItemGroup>

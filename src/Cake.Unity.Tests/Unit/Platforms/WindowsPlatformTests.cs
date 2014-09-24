@@ -66,7 +66,7 @@ namespace Cake.Unity.Tests.Unit.Platforms
                 // Given
                 var context = UnityPlatformFixture.CreateContext();
                 var builder = new ProcessArgumentBuilder();
-                var platform = new WindowsPlatform(true, "C:/Project/Game.exe");
+                var platform = new WindowsPlatform("C:/Project/Game.exe") { PlatformTarget = UnityPlatformTarget.x64 };
 
                 // When
                 platform.BuildArguments(context, builder);

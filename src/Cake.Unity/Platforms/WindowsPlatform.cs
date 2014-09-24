@@ -10,20 +10,15 @@ namespace Cake.Unity.Platforms
 {
     public sealed class WindowsPlatform : IUnityPlatform
     {
-        private readonly bool _use64Bit;
         private readonly FilePath _outputPath;
 
         public bool NoGraphics { get; set; }
+        public UnityPlatformTarget PlatformTarget { get; set; }
 
         public WindowsPlatform(FilePath outputPath)
-            : this(false, outputPath)
         {
-        }
-
-        public WindowsPlatform(bool is64Bit, FilePath outputPath)
-        {
-            _use64Bit = is64Bit;
             _outputPath = outputPath;
+            PlatformTarget = UnityPlatformTarget.x86;
         }
 
         public void BuildArguments(ICakeContext context, ProcessArgumentBuilder builder)
@@ -33,7 +28,7 @@ namespace Cake.Unity.Platforms
                 builder.Append("-nographics");
             }
 
-            builder.Append(_use64Bit ? "-buildWindows64Player" : "-buildWindowsPlayer");
+            builder.Append(PlatformTarget == UnityPlatformTarget.x64 ? "-buildWindows64Player" : "-buildWindowsPlayer");
             builder.AppendQuoted(_outputPath.MakeAbsolute(context.Environment).FullPath);
         }
     }
