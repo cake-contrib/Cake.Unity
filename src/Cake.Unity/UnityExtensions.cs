@@ -14,8 +14,8 @@ namespace Cake.Unity
     {
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
-        [CakeNamespaceImport("Cake.Unity.Platforms")]        
-        public static void Unity(this ICakeContext context, DirectoryPath projectPath, IUnityPlatform platform)
+        [CakeNamespaceImport("Cake.Unity.Platforms")]
+        public static void UnityBuild(this ICakeContext context, DirectoryPath projectPath, IUnityPlatform platform)
         {
             var tool = new UnityRunner(context.FileSystem, context.Environment, context.ProcessRunner);
             tool.Run(context, projectPath, platform);
