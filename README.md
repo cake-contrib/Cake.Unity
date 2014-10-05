@@ -24,7 +24,7 @@ Task("Build")
 		NoGraphics = true });
 
 	// Build for Windows (x64)
-	UnityBuild(projectPath, new WindowsPlatform(true, outputPath) { 
+	UnityBuild(projectPath, new WindowsPlatform(outputPath) { 
 		PlatformTarget = UnityPlatformTarget.x64 });
 });
 
