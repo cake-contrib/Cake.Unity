@@ -1,21 +1,20 @@
 ﻿using Cake.Core.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Cake.Core.IO;
 using Cake.Core;
+using Cake.Core.Tooling;
+using Cake.Unity.Platforms;
 
 namespace Cake.Unity
 {
-    public sealed class UnityRunner : Tool<IUnityPlatform>
+    public sealed class UnityRunner : Core.Tooling.Tool<UnityPlatform>
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
 
-        public UnityRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner)
-            : base(fileSystem, environment, processRunner)
+        public UnityRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IToolLocator tools)
+            : base(fileSystem, environment, processRunner, tools)
         {
             _fileSystem = fileSystem;
             _environment = environment;
@@ -26,13 +25,18 @@ namespace Cake.Unity
             return "Unity";
         }
 
-        protected override FilePath GetDefaultToolPath(IUnityPlatform settings)
+        protected override IEnumerable<FilePath> GetAlternativeToolPaths(UnityPlatform settings)
         {
             var programFilesPath = _environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
-            return programFilesPath.CombineWithFilePath("Unity/Editor/Unity.exe");
+            yield return programFilesPath.CombineWithFilePath("Unity/Editor/Unity.exe");
         }
 
-        public void Run(ICakeContext context, DirectoryPath projectPath, IUnityPlatform platform)
+        protected override IEnumerable<string> GetToolExecutableNames()
+        {
+            yield return "Unity.exe";
+        }
+
+        public void Run(ICakeContext context, DirectoryPath projectPath, UnityPlatform platform)
         {
             if (context == null)
             {

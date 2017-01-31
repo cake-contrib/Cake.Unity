@@ -1,11 +1,7 @@
 ﻿using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Cake.Unity.Platforms;
 
 namespace Cake.Unity
 {
@@ -15,9 +11,9 @@ namespace Cake.Unity
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
         [CakeNamespaceImport("Cake.Unity.Platforms")]
-        public static void UnityBuild(this ICakeContext context, DirectoryPath projectPath, IUnityPlatform platform)
+        public static void UnityBuild(this ICakeContext context, DirectoryPath projectPath, UnityPlatform platform)
         {
-            var tool = new UnityRunner(context.FileSystem, context.Environment, context.ProcessRunner);
+            var tool = new UnityRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
             tool.Run(context, projectPath, platform);
         }
     }

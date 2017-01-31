@@ -127,14 +127,14 @@ namespace Cake.Unity.Tests.Unit
             {
                 // Given
                 var fixture = new UnityRunnerFixture();
-                fixture.Process.GetExitCode().Returns(1);
+                fixture.Process.SetExitCode(1);
 
                 // When
                 var result = Record.Exception(() => fixture.ExecuteRunner());
 
                 // Then
                 Assert.IsType<CakeException>(result);
-                Assert.Equal("Unity: Process returned an error.", result.Message);
+                Assert.Equal("Unity: Process returned an error (exit code 1).", result.Message);
             }
         }
     }
