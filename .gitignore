@@ -8,9 +8,9 @@
 *.sln.ide/
 
 # Build related
-build-results/
-tools/Cake/
-tools/xunit.runners/
+tools/**
+!tools/packages.config
+BuildArtifacts/
 
 # mstest test results
 TestResults
