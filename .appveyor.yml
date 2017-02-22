@@ -1,0 +1,26 @@
+#---------------------------------#
+#  Build Script                   #
+#---------------------------------#
+build_script:
+  - ps: .\build.ps1 -Target AppVeyor
+
+# Tests
+test: off
+
+#---------------------------------#
+#        Branches to build        #
+#---------------------------------#
+branches:
+  # Whitelist
+  only:
+    - develop
+    - master
+    - /release/.*/
+    - /hotfix/.*/
+
+#---------------------------------#
+#  Build Cache                    #
+#---------------------------------#
+cache:
+- Source\packages -> Source\**\packages.config
+- tools -> setup.cake
