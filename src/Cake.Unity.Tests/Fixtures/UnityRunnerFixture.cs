@@ -6,50 +6,63 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cake.Core.Tooling;
+using Cake.Testing;
+using Cake.Unity.Platforms;
 
 namespace Cake.Unity.Tests.Fixtures
 {
     public sealed class UnityRunnerFixture
     {
-        public IFileSystem FileSystem { get; set; }
-        public IProcess Process { get; set; }
+        public FakeFileSystem FileSystem { get; set; }
+        public FakeProcess Process { get; set; }
         public IProcessRunner ProcessRunner { get; set; }
-        public ICakeEnvironment Environment { get; set; }
+        public FakeEnvironment Environment { get; set; }
+        public IToolLocator Tools { get; set; }
 
         public ICakeContext Context { get; set; }
         public DirectoryPath ProjectPath { get; set; }
-        public IUnityPlatform Platform { get; set; }
+        public UnityPlatform Platform { get; set; }
 
         public bool DefaultToolPathExist { get; set; }
         public bool ProjectPathExist { get; set; }
 
         public UnityRunnerFixture()
         {
-            Context = Substitute.For<ICakeContext>();
-            ProjectPath = new DirectoryPath("C:/Project");            
-            Platform = Substitute.For<IUnityPlatform>();
+            ProjectPath = new DirectoryPath("C:/Project");
+            Platform = Substitute.For<UnityPlatform>();
 
             DefaultToolPathExist = true;
             ProjectPathExist = true;
 
-            Process = Substitute.For<IProcess>();
-            Process.GetExitCode().Returns(0);
+            Process = new FakeProcess();
 
             ProcessRunner = Substitute.For<IProcessRunner>();
             ProcessRunner.Start(Arg.Any<FilePath>(), Arg.Any<ProcessSettings>()).Returns(Process);
+             
+            Environment = new FakeEnvironment(PlatformFamily.Windows)
+            {
+                WorkingDirectory = "/Working"
+            };
+            Environment.SetSpecialPath(SpecialPath.ProgramFilesX86,"C:/Program Files (x86)");
 
-            Environment = Substitute.For<ICakeEnvironment>();
-            Environment.WorkingDirectory = "/Working";
-            Environment.GetSpecialPath(Arg.Is(SpecialPath.ProgramFilesX86)).Returns("C:/Program Files (x86)");
-
-            FileSystem = Substitute.For<IFileSystem>();
-            FileSystem.Exist(Arg.Is<FilePath>(a => a.FullPath == "C:/Program Files (x86)/Unity/Editor/Unity.exe")).Returns(c => DefaultToolPathExist);
-            FileSystem.Exist(Arg.Is<DirectoryPath>(a => ProjectPath != null && a.FullPath == ProjectPath.FullPath)).Returns(c => ProjectPathExist);
+            FileSystem = new FakeFileSystem(Environment);
+            var globber = new Globber(FileSystem, Environment);
+            Tools = new ToolLocator(Environment, new ToolRepository(Environment), new ToolResolutionStrategy(FileSystem, Environment, globber, new FakeConfiguration()));
+            Context = new CakeContext(FileSystem, Environment, globber, new FakeLog(), Substitute.For<ICakeArguments>(), ProcessRunner, Substitute.For<IRegistry>(), Tools);
         }
 
         public void ExecuteRunner()
         {
-            var runner = new UnityRunner(FileSystem, Environment, ProcessRunner);
+            if (DefaultToolPathExist)
+            {
+                FileSystem.CreateFile("C:/Program Files (x86)/Unity/Editor/Unity.exe");
+            }
+            if (ProjectPathExist && ProjectPath!=null)
+            {
+                FileSystem.CreateDirectory(ProjectPath);
+            }
+            var runner = new UnityRunner(FileSystem, Environment, ProcessRunner, Tools);
             runner.Run(Context, ProjectPath, Platform);
         }
     }
