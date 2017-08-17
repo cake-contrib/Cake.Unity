@@ -13,7 +13,7 @@ namespace Cake.Unity.Tests.Unit.Actions
             // Given
             var context = UnityActionFixture.CreateContext();
             var builder = new ProcessArgumentBuilder();
-            var platform = new UnityBuildPlayerAction(UnityBuildPlayer.Linux32Player, "C:/Project/Game.exe");
+            var platform = new UnityBuildPlayerAction(UnityBuildPlayer.Linux32, "C:/Project/Game.exe");
 
             // When
             platform.BuildArguments(context, builder);
@@ -28,7 +28,7 @@ namespace Cake.Unity.Tests.Unit.Actions
             // Given
             var context = UnityActionFixture.CreateContext();
             var builder = new ProcessArgumentBuilder();
-            var platform = new UnityBuildPlayerAction(UnityBuildPlayer.Linux64Player, "C:/Project/Game.exe");
+            var platform = new UnityBuildPlayerAction(UnityBuildPlayer.Linux64, "C:/Project/Game.exe");
 
             // When
             platform.BuildArguments(context, builder);
@@ -43,7 +43,7 @@ namespace Cake.Unity.Tests.Unit.Actions
             // Given
             var context = UnityActionFixture.CreateContext();
             var builder = new ProcessArgumentBuilder();
-            var platform = new UnityBuildPlayerAction(UnityBuildPlayer.LinuxUniversalPlayer, "C:/Project/Game.exe");
+            var platform = new UnityBuildPlayerAction(UnityBuildPlayer.LinuxUniversal, "C:/Project/Game.exe");
 
             // When
             platform.BuildArguments(context, builder);
@@ -58,7 +58,7 @@ namespace Cake.Unity.Tests.Unit.Actions
             // Given
             var context = UnityActionFixture.CreateContext();
             var builder = new ProcessArgumentBuilder();
-            var platform = new UnityBuildPlayerAction(UnityBuildPlayer.OSXPlayer, "C:/Project/Game.exe");
+            var platform = new UnityBuildPlayerAction(UnityBuildPlayer.OSX, "C:/Project/Game.exe");
 
             // When
             platform.BuildArguments(context, builder);
@@ -73,7 +73,7 @@ namespace Cake.Unity.Tests.Unit.Actions
             // Given
             var context = UnityActionFixture.CreateContext();
             var builder = new ProcessArgumentBuilder();
-            var platform = new UnityBuildPlayerAction(UnityBuildPlayer.OSX64Player, "C:/Project/Game.exe");
+            var platform = new UnityBuildPlayerAction(UnityBuildPlayer.OSX64, "C:/Project/Game.exe");
 
             // When
             platform.BuildArguments(context, builder);
@@ -88,7 +88,7 @@ namespace Cake.Unity.Tests.Unit.Actions
             // Given
             var context = UnityActionFixture.CreateContext();
             var builder = new ProcessArgumentBuilder();
-            var platform = new UnityBuildPlayerAction(UnityBuildPlayer.OSXUniversalPlayer, "C:/Project/Game.exe");
+            var platform = new UnityBuildPlayerAction(UnityBuildPlayer.OSXUniversal, "C:/Project/Game.exe");
 
             // When
             platform.BuildArguments(context, builder);
@@ -103,7 +103,7 @@ namespace Cake.Unity.Tests.Unit.Actions
             // Given
             var context = UnityActionFixture.CreateContext();
             var builder = new ProcessArgumentBuilder();
-            var platform = new UnityBuildPlayerAction(UnityBuildPlayer.WindowsPlayer, "C:/Project/Game.exe");
+            var platform = new UnityBuildPlayerAction(UnityBuildPlayer.Windows, "C:/Project/Game.exe");
 
             // When
             platform.BuildArguments(context, builder);
@@ -117,7 +117,7 @@ namespace Cake.Unity.Tests.Unit.Actions
             // Given
             var context = UnityActionFixture.CreateContext();
             var builder = new ProcessArgumentBuilder();
-            var platform = new UnityBuildPlayerAction(UnityBuildPlayer.Windows64Player, "C:/Project/Game.exe");
+            var platform = new UnityBuildPlayerAction(UnityBuildPlayer.Windows64, "C:/Project/Game.exe");
 
             // When
             platform.BuildArguments(context, builder);
@@ -132,7 +132,7 @@ namespace Cake.Unity.Tests.Unit.Actions
             // Given
             var context = UnityActionFixture.CreateContext();
             var builder = new ProcessArgumentBuilder();
-            var platform = new UnityBuildPlayerAction(UnityBuildPlayer.WindowsPlayer, "Project/Game.exe");
+            var platform = new UnityBuildPlayerAction(UnityBuildPlayer.Windows, "Project/Game.exe");
 
             // When
             platform.BuildArguments(context, builder);

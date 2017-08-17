@@ -9,7 +9,7 @@ namespace Cake.Unity
     public static class UnityExtensions
     {
         [CakeMethodAlias]
-        public static void UnityBuildPlayer(this ICakeContext context, DirectoryPath projectPath, UnityBuildPlayer player, FilePath outputPath)
+        public static void UnityBuild(this ICakeContext context, DirectoryPath projectPath, UnityBuildPlayer player, FilePath outputPath)
         {
             var tool = new UnityRunner(context);
             var action = new UnityBuildPlayerAction(player, outputPath);
@@ -17,10 +17,10 @@ namespace Cake.Unity
         }
 
         [CakeMethodAlias]
-        public static void UnityExecuteMethod(this ICakeContext context, DirectoryPath projectPath, string method)
+        public static void UnityExecuteMethod(this ICakeContext context, DirectoryPath projectPath, string method, params string[] extraParameters)
         {
             var tool = new UnityRunner(context);
-            var action = new UnityExecuteMethodAction(method);
+            var action = new UnityExecuteMethodAction(method, extraParameters);
             tool.Run(context, projectPath, action);
         }
 

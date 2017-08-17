@@ -26,14 +26,14 @@ namespace Cake.Unity.Actions
         {
             switch (_player)
             {
-            case UnityBuildPlayer.Linux32Player: return "-buildLinux32Player";
-            case UnityBuildPlayer.Linux64Player: return "-buildLinux64Player";
-            case UnityBuildPlayer.LinuxUniversalPlayer: return "-buildLinuxUniversalPlayer";
-            case UnityBuildPlayer.OSXPlayer: return "-buildOSXPlayer";
-            case UnityBuildPlayer.OSX64Player: return "-buildOSX64Player";
-            case UnityBuildPlayer.OSXUniversalPlayer: return "-buildOSXUniversalPlayer";
-            case UnityBuildPlayer.WindowsPlayer: return "-buildWindowsPlayer";
-            case UnityBuildPlayer.Windows64Player: return "-buildWindows64Player";
+            case UnityBuildPlayer.Linux32: return "-buildLinux32Player";
+            case UnityBuildPlayer.Linux64: return "-buildLinux64Player";
+            case UnityBuildPlayer.LinuxUniversal: return "-buildLinuxUniversalPlayer";
+            case UnityBuildPlayer.OSX: return "-buildOSXPlayer";
+            case UnityBuildPlayer.OSX64: return "-buildOSX64Player";
+            case UnityBuildPlayer.OSXUniversal: return "-buildOSXUniversalPlayer";
+            case UnityBuildPlayer.Windows: return "-buildWindowsPlayer";
+            case UnityBuildPlayer.Windows64: return "-buildWindows64Player";
             default:
                 throw new ArgumentOutOfRangeException();
             }
