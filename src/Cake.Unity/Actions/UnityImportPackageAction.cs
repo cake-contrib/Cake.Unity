@@ -17,6 +17,7 @@ namespace Cake.Unity.Actions
 
         public override void BuildArguments(ICakeContext context, ProcessArgumentBuilder arguments)
         {
+            base.BuildArguments(context, arguments);
             arguments.Append("-importPackage");
             arguments.AppendQuoted(_packagePath.MakeAbsolute(context.Environment).FullPath);
         }

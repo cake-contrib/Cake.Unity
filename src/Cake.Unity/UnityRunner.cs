@@ -50,7 +50,7 @@ namespace Cake.Unity
             yield return "Unity.exe";
         }
 
-        public void Run(ICakeContext context, DirectoryPath projectPath, UnityAction platform)
+        public void Run(ICakeContext context, DirectoryPath projectPath, UnityAction action)
         {
             if (context == null)
             {
@@ -60,9 +60,9 @@ namespace Cake.Unity
             {
                 throw new ArgumentNullException(nameof(projectPath));
             }
-            if (platform == null)
+            if (action == null)
             {
-                throw new ArgumentNullException(nameof(platform));
+                throw new ArgumentNullException(nameof(action));
             }
 
             // Make sure the project path exist.
@@ -89,10 +89,10 @@ namespace Cake.Unity
             arguments.AppendQuoted(projectPath.MakeAbsolute(_environment).FullPath);
 
             // Let the action add it's own arguments.
-            platform.BuildArguments(context, arguments);
+            action.BuildArguments(context, arguments);
 
             // Run the tool.
-            Run(platform, arguments);
+            Run(action, arguments);
         }
     }
 }

@@ -49,6 +49,7 @@
     <Compile Include="Actions\UnityImportPackageAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnityBuildPlayer.cs" />
+    <Compile Include="UnityBuildTarget.cs" />
     <Compile Include="UnityExtensions.cs" />
     <Compile Include="UnityRunner.cs" />
   </ItemGroup>

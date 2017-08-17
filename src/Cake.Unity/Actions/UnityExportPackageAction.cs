@@ -21,6 +21,7 @@ namespace Cake.Unity.Actions
 
         public override void BuildArguments(ICakeContext context, ProcessArgumentBuilder arguments)
         {
+            base.BuildArguments(context, arguments);
             arguments.Append("-exportPackage");
             foreach (var exportAssetPath in _exportAssetPaths)
             {
