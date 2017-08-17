@@ -5,7 +5,7 @@ using Cake.Core.Tooling;
 
 namespace Cake.Unity.Actions
 {
-    public abstract class UnityAction : ToolSettings
+    public class UnityAction : ToolSettings
     {
         /// <summary>
         /// When running in batch mode, do not initialize the graphics device at all.

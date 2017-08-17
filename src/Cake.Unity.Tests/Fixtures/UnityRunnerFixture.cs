@@ -1,14 +1,9 @@
 ﻿using Cake.Core;
 using Cake.Core.IO;
 using NSubstitute;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Cake.Core.Tooling;
 using Cake.Testing;
-using Cake.Unity.Platforms;
+using Cake.Unity.Actions;
 
 namespace Cake.Unity.Tests.Fixtures
 {
@@ -22,7 +17,7 @@ namespace Cake.Unity.Tests.Fixtures
 
         public ICakeContext Context { get; set; }
         public DirectoryPath ProjectPath { get; set; }
-        public UnityPlatform Platform { get; set; }
+        public UnityAction Action { get; set; }
 
         public bool DefaultToolPathExist { get; set; }
         public bool ProjectPathExist { get; set; }
@@ -30,7 +25,7 @@ namespace Cake.Unity.Tests.Fixtures
         public UnityRunnerFixture()
         {
             ProjectPath = new DirectoryPath("C:/Project");
-            Platform = Substitute.For<UnityPlatform>();
+            Action = Substitute.For<UnityAction>();
 
             DefaultToolPathExist = true;
             ProjectPathExist = true;
@@ -44,6 +39,7 @@ namespace Cake.Unity.Tests.Fixtures
             {
                 WorkingDirectory = "/Working"
             };
+            Environment.SetSpecialPath(SpecialPath.ProgramFiles, "C:/Program Files");
             Environment.SetSpecialPath(SpecialPath.ProgramFilesX86,"C:/Program Files (x86)");
 
             FileSystem = new FakeFileSystem(Environment);
@@ -63,7 +59,7 @@ namespace Cake.Unity.Tests.Fixtures
                 FileSystem.CreateDirectory(ProjectPath);
             }
             var runner = new UnityRunner(FileSystem, Environment, ProcessRunner, Tools);
-            runner.Run(Context, ProjectPath, Platform);
+            runner.Run(Context, ProjectPath, Action);
         }
     }
 }

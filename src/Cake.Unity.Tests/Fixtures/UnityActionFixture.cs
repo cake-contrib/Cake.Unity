@@ -1,16 +1,9 @@
 ﻿using Cake.Core;
-using Cake.Core.IO;
-using Cake.Unity.Platforms;
 using NSubstitute;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cake.Unity.Tests.Fixtures
 {
-    public sealed class UnityPlatformFixture
+    public sealed class UnityActionFixture
     {
         public static ICakeContext CreateContext()
         {
