@@ -27,8 +27,18 @@ namespace Cake.Unity
 
         protected override IEnumerable<FilePath> GetAlternativeToolPaths(UnityPlatform settings)
         {
-            var programFilesPath = _environment.GetSpecialPath(SpecialPath.ProgramFilesX86);
-            yield return programFilesPath.CombineWithFilePath("Unity/Editor/Unity.exe");
+            switch (_environment.Platform.Family)
+            {
+            case PlatformFamily.Windows:
+                yield return _environment.GetSpecialPath(SpecialPath.ProgramFiles)
+                    .CombineWithFilePath("Unity/Editor/Unity.exe");
+                yield return _environment.GetSpecialPath(SpecialPath.ProgramFilesX86)
+                    .CombineWithFilePath("Unity/Editor/Unity.exe");
+                break;
+            case PlatformFamily.OSX:
+                yield return "/Applications/Unity/Unity.app/Contents/MacOS/Unity";
+                break;
+            }
         }
 
         protected override IEnumerable<string> GetToolExecutableNames()
