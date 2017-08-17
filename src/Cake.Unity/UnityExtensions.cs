@@ -15,5 +15,29 @@ namespace Cake.Unity
             var action = new UnityBuildPlayerAction(player, outputPath);
             tool.Run(context, projectPath, action);
         }
+
+        [CakeMethodAlias]
+        public static void UnityExecuteMethod(this ICakeContext context, DirectoryPath projectPath, string method)
+        {
+            var tool = new UnityRunner(context);
+            var action = new UnityExecuteMethodAction(method);
+            tool.Run(context, projectPath, action);
+        }
+
+        [CakeMethodAlias]
+        public static void UnityExportPackage(this ICakeContext context, DirectoryPath projectPath, FilePath exportFileName, params DirectoryPath[] exportAssetPaths)
+        {
+            var tool = new UnityRunner(context);
+            var action = new UnityExportPackageAction(exportFileName, exportAssetPaths);
+            tool.Run(context, projectPath, action);
+        }
+
+        [CakeMethodAlias]
+        public static void UnityImportPackage(this ICakeContext context, DirectoryPath projectPath, FilePath packagePath)
+        {
+            var tool = new UnityRunner(context);
+            var action = new UnityImportPackageAction(packagePath);
+            tool.Run(context, projectPath, action);
+        }
     }
 }

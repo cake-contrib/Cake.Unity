@@ -44,6 +44,9 @@
   <ItemGroup>
     <Compile Include="Actions\UnityBuildPlayerAction.cs" />
     <Compile Include="Actions\UnityAction.cs" />
+    <Compile Include="Actions\UnityExecuteMethodAction.cs" />
+    <Compile Include="Actions\UnityExportPackageAction.cs" />
+    <Compile Include="Actions\UnityImportPackageAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnityBuildPlayer.cs" />
     <Compile Include="UnityExtensions.cs" />
