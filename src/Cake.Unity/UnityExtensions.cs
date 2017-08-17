@@ -1,7 +1,7 @@
 ﻿using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
-using Cake.Unity.Platforms;
+using Cake.Unity.Actions;
 
 namespace Cake.Unity
 {
@@ -9,12 +9,11 @@ namespace Cake.Unity
     public static class UnityExtensions
     {
         [CakeMethodAlias]
-        [CakeAliasCategory("Build")]
-        [CakeNamespaceImport("Cake.Unity.Platforms")]
-        public static void UnityBuild(this ICakeContext context, DirectoryPath projectPath, UnityPlatform platform)
+        public static void UnityBuildPlayer(this ICakeContext context, DirectoryPath projectPath, UnityBuildPlayer player, FilePath outputPath)
         {
-            var tool = new UnityRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            tool.Run(context, projectPath, platform);
+            var tool = new UnityRunner(context);
+            var action = new UnityBuildPlayerAction(player, outputPath);
+            tool.Run(context, projectPath, action);
         }
     }
 }

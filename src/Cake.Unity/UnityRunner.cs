@@ -1,17 +1,21 @@
-﻿using Cake.Core.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Cake.Core.IO;
 using Cake.Core;
+using Cake.Core.IO;
 using Cake.Core.Tooling;
-using Cake.Unity.Platforms;
+using Cake.Unity.Actions;
 
 namespace Cake.Unity
 {
-    public sealed class UnityRunner : Core.Tooling.Tool<UnityPlatform>
+    public sealed class UnityRunner : Tool<UnityAction>
     {
         private readonly IFileSystem _fileSystem;
         private readonly ICakeEnvironment _environment;
+
+        public UnityRunner(ICakeContext context)
+            : this(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools)
+        {
+        }
 
         public UnityRunner(IFileSystem fileSystem, ICakeEnvironment environment, IProcessRunner processRunner, IToolLocator tools)
             : base(fileSystem, environment, processRunner, tools)
@@ -25,7 +29,7 @@ namespace Cake.Unity
             return "Unity";
         }
 
-        protected override IEnumerable<FilePath> GetAlternativeToolPaths(UnityPlatform settings)
+        protected override IEnumerable<FilePath> GetAlternativeToolPaths(UnityAction settings)
         {
             switch (_environment.Platform.Family)
             {
@@ -46,19 +50,19 @@ namespace Cake.Unity
             yield return "Unity.exe";
         }
 
-        public void Run(ICakeContext context, DirectoryPath projectPath, UnityPlatform platform)
+        public void Run(ICakeContext context, DirectoryPath projectPath, UnityAction platform)
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (projectPath == null)
             {
-                throw new ArgumentNullException("projectPath");
+                throw new ArgumentNullException(nameof(projectPath));
             }
             if (platform == null)
             {
-                throw new ArgumentNullException("platform");
+                throw new ArgumentNullException(nameof(platform));
             }
 
             // Make sure the project path exist.
@@ -71,13 +75,20 @@ namespace Cake.Unity
             }
 
             // Build the arguments.
+            // https://docs.unity3d.com/Manual/CommandLineArguments.html
             var arguments = new ProcessArgumentBuilder();
+
+            // Run Unity in batch mode.
             arguments.Append("-batchmode");
+
+            // Quit the Unity Editor after other commands have finished executing.
             arguments.Append("-quit");
+
+            // Open the project at the given path.
             arguments.Append("-projectPath");
             arguments.AppendQuoted(projectPath.MakeAbsolute(_environment).FullPath);
 
-            // Let the settings add it's own arguments.
+            // Let the action add it's own arguments.
             platform.BuildArguments(context, arguments);
 
             // Run the tool.
