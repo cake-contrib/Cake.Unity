@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>Cake.Unity</id>
+    <version>0.0.0</version>
+    <authors>patriksvensson</authors>
+    <owners>patriksvensson, cake-contrib</owners>
+    <description>Cake Unity AddIn.</description>
+    <summary>Cake AddIn that extends Cake with ability to execute the Unity Editor as a command line utility.</summary>
+    <licenseUrl>https://github.com/cake-contrib/Cake.Unity/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/cake-contrib/Cake.Unity/</projectUrl>
+    <iconUrl>https://cdn.rawgit.com/cake-contrib/graphics/a5cf0f881c390650144b2243ae551d5b9f836196/png/cake-contrib-medium.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <copyright>Copyright (c) Cake Contributions 2014 - Present</copyright>
+    <tags>Cake, Script, Build, Unity</tags>
+  </metadata>
+  <files>
+    <file src="Cake.Unity.dll" target="lib/net46" />
+    <file src="Cake.Unity.pdb" target="lib/net46" />
+  </files>
+</package>
