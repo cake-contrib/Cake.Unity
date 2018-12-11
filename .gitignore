@@ -6,6 +6,7 @@
 [Pp]ackages/
 [Bb]uild/
 *.sln.ide/
+/src/.vs
 
 # Build related
 tools/**

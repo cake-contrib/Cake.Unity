@@ -49,7 +49,7 @@ namespace Cake.Unity.Tests.Fixtures
             FileSystem = new FakeFileSystem(Environment);
             var globber = new Globber(FileSystem, Environment);
             Tools = new ToolLocator(Environment, new ToolRepository(Environment), new ToolResolutionStrategy(FileSystem, Environment, globber, new FakeConfiguration()));
-            Context = new CakeContext(FileSystem, Environment, globber, new FakeLog(), Substitute.For<ICakeArguments>(), ProcessRunner, Substitute.For<IRegistry>(), Tools);
+            Context = new CakeContext(FileSystem, Environment, globber, new FakeLog(), Substitute.For<ICakeArguments>(), ProcessRunner, Substitute.For<IRegistry>(), Tools, Substitute.For<ICakeDataService>());
         }
 
         public void ExecuteRunner()
