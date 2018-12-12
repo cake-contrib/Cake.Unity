@@ -22,19 +22,23 @@ namespace Cake.Unity
 
         private string ProgramFiles => environment.GetSpecialPath(SpecialPath.ProgramFiles).FullPath;
 
-        public IEnumerable<UnityEditorDescriptor> Seek()
+        public IReadOnlyCollection<UnityEditorDescriptor> Seek()
         {
-            string searchPattern = $"{ProgramFiles}/*Unity*/**/Editor/Unity.exe";
+            var searchPattern = $"{ProgramFiles}/*Unity*/**/Editor/Unity.exe";
 
             log.Debug("Searching for available Unity Editors...");
             log.Debug("Search pattern: {0}", searchPattern);
-            IEnumerable<FilePath> candidates = globber.GetFiles(searchPattern);
+            var candidates = globber.GetFiles(searchPattern).ToList();
 
-            return
+            log.Debug("Found {0} candidates.", candidates.Count);
+
+            var editors =
                 from candidatePath in candidates
                 let version = DetermineVersion(candidatePath)
                 where version != null
                 select new UnityEditorDescriptor(version, candidatePath);
+
+            return editors.ToList();
         }
 
         private string DetermineVersion(FilePath editorPath)
@@ -47,11 +51,13 @@ namespace Cake.Unity
 
             if (year <= 0 || stream <= 0 || update < 0)
             {
-                log.Debug("Failed: file version {0} is incorrect. Expected first two parts to be positive numbers and third one to be non negative.", fileVersion);
+                log.Debug(
+                    "Failed: file version {0}.{1}.{2} is incorrect. Expected first two parts to be positive numbers and third one to be non negative.",
+                    year, stream, update);
                 return null;
             }
 
-            string version = $"{year}.{stream}.{update}";
+            var version = $"{year}.{stream}.{update}";
 
             log.Debug("Success: {0}", version);
 

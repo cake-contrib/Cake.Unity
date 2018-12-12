@@ -21,7 +21,7 @@ namespace Cake.Unity
 
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
-        public static IEnumerable<UnityEditorDescriptor> FindUnityEditors(this ICakeContext context) =>
+        public static IReadOnlyCollection<UnityEditorDescriptor> FindUnityEditors(this ICakeContext context) =>
             new SeekerOfEditors(context.Environment, context.Globber, context.Log)
                 .Seek();
     }
