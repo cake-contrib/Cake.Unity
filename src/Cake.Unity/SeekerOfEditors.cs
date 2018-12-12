@@ -41,7 +41,7 @@ namespace Cake.Unity
             return editors.ToList();
         }
 
-        private string DetermineVersion(FilePath editorPath)
+        private UnityVersion DetermineVersion(FilePath editorPath)
         {
             log.Debug("Determining version of Unity Editor at path {0}...", editorPath);
 
@@ -57,7 +57,7 @@ namespace Cake.Unity
                 return null;
             }
 
-            var version = $"{year}.{stream}.{update}";
+            var version = new UnityVersion(year, stream, update);
 
             log.Debug("Success: {0}", version);
 
