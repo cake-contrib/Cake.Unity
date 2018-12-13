@@ -24,6 +24,20 @@ namespace Cake.Unity
 
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
+        public static UnityEditorDescriptor FindUnityEditor(this ICakeContext context) =>
+            Enumerable.FirstOrDefault
+            (
+                from editor in context.FindUnityEditors()
+                let version = editor.Version
+                orderby
+                    version.Year descending,
+                    version.Stream descending,
+                    version.Update descending
+                select editor
+            );
+
+        [CakeMethodAlias]
+        [CakeAliasCategory("Build")]
         public static UnityEditorDescriptor FindUnityEditor(this ICakeContext context, int year) =>
             Enumerable.FirstOrDefault
             (
