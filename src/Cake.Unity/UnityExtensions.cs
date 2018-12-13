@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.Annotations;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Unity.Platforms;
 using static Cake.Core.PlatformFamily;
@@ -13,6 +14,8 @@ namespace Cake.Unity
     [CakeAliasCategory("Unity")]
     public static class UnityExtensions
     {
+        private static IReadOnlyCollection<UnityEditorDescriptor> unityEditorsCache;
+
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
         [CakeNamespaceImport("Cake.Unity.Platforms")]
@@ -68,10 +71,21 @@ namespace Cake.Unity
 
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
-        public static IReadOnlyCollection<UnityEditorDescriptor> FindUnityEditors(this ICakeContext context) =>
-            context.Environment.Platform.Family != Windows
-                ? throw new NotSupportedException("Cannot locate Unity Editors. Only Windows platform is supported.")
-                : new SeekerOfEditors(context.Environment, context.Globber, context.Log)
-                    .Seek();
+        public static IReadOnlyCollection<UnityEditorDescriptor> FindUnityEditors(this ICakeContext context)
+        {
+            if (context.Environment.Platform.Family != Windows)
+                throw new NotSupportedException("Cannot locate Unity Editors. Only Windows platform is supported.");
+
+            if (unityEditorsCache != null)
+            {
+                context.Log.Debug("Already searched for Unity Editors. Using cached results.");
+                return unityEditorsCache;
+            }
+
+            return
+                unityEditorsCache =
+                    new SeekerOfEditors(context.Environment, context.Globber, context.Log)
+                        .Seek();
+        }
     }
 }
