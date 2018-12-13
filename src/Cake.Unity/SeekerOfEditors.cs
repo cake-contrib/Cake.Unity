@@ -44,6 +44,7 @@ namespace Cake.Unity
 
         private UnityVersion DetermineVersion(FilePath editorPath)
         {
+            log.Debug(string.Empty);
             log.Debug("Determining version of Unity Editor at path {0}...", editorPath);
 
             var fileVersion = FileVersionInfo.GetVersionInfo(editorPath.FullPath);
@@ -52,9 +53,10 @@ namespace Cake.Unity
 
             if (year <= 0 || stream <= 0 || update < 0)
             {
-                log.Debug(
-                    "Failed: file version {0}.{1}.{2} is incorrect. Expected first two parts to be positive numbers and third one to be non negative.",
-                    year, stream, update);
+                log.Warning(
+                    "Unity Editor file version {0} at path {1} is incorrect. Expected first two parts to be positive numbers and third one to be non negative.",
+                    $"{year}.{stream}.{update}.{fileVersion.FilePrivatePart}",
+                    editorPath.FullPath);
                 return null;
             }
 
@@ -64,14 +66,12 @@ namespace Cake.Unity
 
             if (suffix.HasValue)
             {
-                log.Debug("Unity version suffix determined.");
                 var version = new UnityVersion(year, stream, update, suffix.Value.character, suffix.Value.number);
                 log.Debug("Result Unity Editor version (full): {0}", version);
                 return version;
             }
             else
             {
-                log.Debug("Unity version suffix not determined.");
                 var version = new UnityVersion(year, stream, update);
                 log.Debug("Result Unity Editor version (short): {0}", version);
                 return version;
