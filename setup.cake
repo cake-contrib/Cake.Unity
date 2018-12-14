@@ -1,4 +1,4 @@
-#load "nuget:https://www.myget.org/F/cake-contrib/api/v2?package=Cake.Recipe&prerelease"
+#load nuget:https://www.myget.org/F/cake-contrib/api/v2?package=Cake.Recipe&prerelease
 
 Environment.SetVariableNames();
 
@@ -8,8 +8,7 @@ BuildParameters.SetParameters(context: Context,
                             title: "Cake.Unity",
                             repositoryOwner: "cake-contrib",
                             repositoryName: "Cake.Unity",
-                            appVeyorAccountName: "cakecontrib",
-                            shouldPublishMyGet: false);
+                            appVeyorAccountName: "cakecontrib");
 
 BuildParameters.PrintParameters(Context);
 
