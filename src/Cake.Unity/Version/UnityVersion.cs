@@ -1,9 +1,18 @@
-﻿using static Cake.Unity.Version.UnityReleaseStage;
+﻿using System.Collections.Generic;
+using static Cake.Unity.Version.UnityReleaseStage;
 
 namespace Cake.Unity.Version
 {
     public class UnityVersion
     {
+        private static readonly Dictionary<char, UnityReleaseStage> SuffixToStage = new Dictionary<char, UnityReleaseStage>
+        {
+            { 'a', Alpha },
+            { 'b', Beta },
+            { 'p', Patch },
+            { 'f', Final },
+        };
+
         public UnityVersion(int year, int stream, int update)
         {
             this.Year = year;
@@ -24,7 +33,10 @@ namespace Cake.Unity.Version
         public char? SuffixCharacter { get; }
         public int? SuffixNumber { get; }
 
-        public UnityReleaseStage Stage => Alpha;
+        public UnityReleaseStage Stage =>
+            SuffixCharacter.HasValue && SuffixToStage.ContainsKey(SuffixCharacter.Value)
+                ? SuffixToStage[SuffixCharacter.Value]
+                : Unknown;
 
         public override string ToString() =>
             SuffixCharacter.HasValue && SuffixNumber.HasValue
