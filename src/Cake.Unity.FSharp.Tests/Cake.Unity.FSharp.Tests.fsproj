@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>net46</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -13,8 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="UnitTest1.fs"/>
-    <Compile Include="Program.fs"/>
+    <Compile Include="UnitTest1.fs" />
   </ItemGroup>
 
 </Project>
