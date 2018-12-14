@@ -8,8 +8,7 @@ BuildParameters.SetParameters(context: Context,
                             title: "Cake.Unity",
                             repositoryOwner: "cake-contrib",
                             repositoryName: "Cake.Unity",
-                            appVeyorAccountName: "cakecontrib",
-                            shouldPublishMyGet: false);
+                            appVeyorAccountName: "cakecontrib");
 
 BuildParameters.PrintParameters(Context);
 
