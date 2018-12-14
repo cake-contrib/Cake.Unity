@@ -13,7 +13,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="UnitTest1.fs" />
+    <Compile Include="UnityVersionTests.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cake.Unity\Cake.Unity.csproj" />
   </ItemGroup>
 
 </Project>

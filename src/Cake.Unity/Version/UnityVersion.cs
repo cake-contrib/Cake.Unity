@@ -1,4 +1,6 @@
-﻿namespace Cake.Unity
+﻿using static Cake.Unity.Version.UnityReleaseStage;
+
+namespace Cake.Unity.Version
 {
     public class UnityVersion
     {
@@ -21,6 +23,8 @@
         public int Update { get; }
         public char? SuffixCharacter { get; }
         public int? SuffixNumber { get; }
+
+        public UnityReleaseStage Stage => Alpha;
 
         public override string ToString() =>
             SuffixCharacter.HasValue && SuffixNumber.HasValue

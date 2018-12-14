@@ -27,6 +27,7 @@ namespace Cake.Unity
 
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
+        [CakeNamespaceImport("Cake.Unity.Version")]
         public static UnityEditorDescriptor FindUnityEditor(this ICakeContext context) =>
             Enumerable.FirstOrDefault
             (
@@ -41,6 +42,7 @@ namespace Cake.Unity
 
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
+        [CakeNamespaceImport("Cake.Unity.Version")]
         public static UnityEditorDescriptor FindUnityEditor(this ICakeContext context, int year) =>
             Enumerable.FirstOrDefault
             (
@@ -56,6 +58,7 @@ namespace Cake.Unity
 
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
+        [CakeNamespaceImport("Cake.Unity.Version")]
         public static UnityEditorDescriptor FindUnityEditor(this ICakeContext context, int year, int stream) =>
             Enumerable.FirstOrDefault
             (
@@ -71,6 +74,7 @@ namespace Cake.Unity
 
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
+        [CakeNamespaceImport("Cake.Unity.Version")]
         public static IReadOnlyCollection<UnityEditorDescriptor> FindUnityEditors(this ICakeContext context)
         {
             if (context.Environment.Platform.Family != Windows)

@@ -5,6 +5,7 @@ using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Unity.Version;
 
 namespace Cake.Unity
 {
