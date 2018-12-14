@@ -7,7 +7,9 @@ using Cake.Core.Annotations;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Unity.Platforms;
+using Cake.Unity.Version;
 using static Cake.Core.PlatformFamily;
+using static Cake.Unity.Version.UnityReleaseStage;
 
 namespace Cake.Unity
 {
@@ -34,6 +36,7 @@ namespace Cake.Unity
                 from editor in context.FindUnityEditors()
                 let version = editor.Version
                 orderby
+                    ReleaseStagePriority(version.Stage),
                     version.Year descending,
                     version.Stream descending,
                     version.Update descending
@@ -51,6 +54,7 @@ namespace Cake.Unity
                 where
                     version.Year == year
                 orderby
+                    ReleaseStagePriority(version.Stage),
                     version.Stream descending,
                     version.Update descending
                 select editor
@@ -68,6 +72,7 @@ namespace Cake.Unity
                     version.Year == year &&
                     version.Stream == stream
                 orderby
+                    ReleaseStagePriority(version.Stage),
                     version.Update descending
                 select editor
             );
@@ -90,6 +95,25 @@ namespace Cake.Unity
                 unityEditorsCache =
                     new SeekerOfEditors(context.Environment, context.Globber, context.Log)
                         .Seek();
+        }
+
+        private static int ReleaseStagePriority(UnityReleaseStage stage)
+        {
+            switch (stage)
+            {
+                case Final:
+                case Patch:
+                    return 1;
+
+                case Beta:
+                    return 3;
+
+                case Alpha:
+                    return 4;
+
+                default:
+                    return 2;
+            }
         }
     }
 }
