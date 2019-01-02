@@ -14,7 +14,7 @@ using static Cake.Unity.Version.UnityReleaseStage;
 namespace Cake.Unity
 {
     [CakeAliasCategory("Unity")]
-    public static class UnityExtensions
+    public static class UnityAliases
     {
         private static IReadOnlyCollection<UnityEditorDescriptor> unityEditorsCache;
 
