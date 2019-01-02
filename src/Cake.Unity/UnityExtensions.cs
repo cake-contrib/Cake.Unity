@@ -27,6 +27,20 @@ namespace Cake.Unity
             tool.Run(context, projectPath, platform);
         }
 
+        /// <summary>
+        /// Locates installed Unity Editor with latest version.
+        /// </summary>
+        /// <returns>Descriptor of Unity Editor or null.</returns>
+        /// <exception cref="NotSupportedException">Thrown for non-Windows platforms.</exception>
+        /// <example>
+        /// <code>
+        /// var editor = FindUnityEditor();
+        /// if (editor != null)
+        ///     Information("Found Unity Editor {0} at path {1}", editor.Version, editor.Path);
+        /// else
+        ///     Warning("Cannot find Unity Editor");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
         [CakeNamespaceImport("Cake.Unity.Version")]
@@ -43,6 +57,22 @@ namespace Cake.Unity
                 select editor
             );
 
+        /// <summary>
+        /// <para>Locates installed Unity Editor by version (year).</para>
+        /// <para>If more than one Unity Editor satisfies specified version, then latest one is returned.</para>
+        /// </summary>
+        /// <param name="year">Year part of Unity version (aka major version).</param>
+        /// <returns>Descriptor of Unity Editor or null.</returns>
+        /// <exception cref="NotSupportedException">Thrown for non-Windows platforms.</exception>
+        /// <example>
+        /// <code>
+        /// var editor = FindUnityEditor(2018);
+        /// if (editor != null)
+        ///     Information("Found Unity Editor {0} at path {1}", editor.Version, editor.Path);
+        /// else
+        ///     Warning("Cannot find Unity Editor 2018");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
         [CakeNamespaceImport("Cake.Unity.Version")]
@@ -60,6 +90,23 @@ namespace Cake.Unity
                 select editor
             );
 
+        /// <summary>
+        /// <para>Locates installed Unity Editor by version (year and stream).</para>
+        /// <para>If more than one Unity Editor satisfies specified version, then latest one is returned.</para>
+        /// </summary>
+        /// <param name="year">Year part of Unity version aka major version.</param>
+        /// <param name="stream">Stream part of Unity version (aka minor version). Usually 1, 2 and 3 mean tech stream while 4 is long term support.</param>
+        /// <returns>Descriptor of Unity Editor or null.</returns>
+        /// <exception cref="NotSupportedException">Thrown for non-Windows platforms.</exception>
+        /// <example>
+        /// <code>
+        /// var editor = FindUnityEditor(2018, 3);
+        /// if (editor != null)
+        ///     Information("Found Unity Editor {0} at path {1}", editor.Version, editor.Path);
+        /// else
+        ///     Warning("Cannot find Unity Editor 2018.3");
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
         [CakeNamespaceImport("Cake.Unity.Version")]
@@ -77,6 +124,17 @@ namespace Cake.Unity
                 select editor
             );
 
+        /// <summary>
+        /// Locates installed Unity Editors.
+        /// </summary>
+        /// <returns>Collection of found Unity Editors (path and version info).</returns>
+        /// <exception cref="NotSupportedException">Thrown for non-Windows platforms.</exception>
+        /// <example>
+        /// <code>
+        /// foreach (var editor in FindUnityEditors())
+        ///     Information("Found Unity Editor {0} at path {1}", editor.Version, editor.Path);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
         [CakeNamespaceImport("Cake.Unity.Version")]
