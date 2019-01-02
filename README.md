@@ -39,6 +39,8 @@ Task("Default")
     .IsDependentOn("Find-Unity-Editors")
     .IsDependentOn("Find-Unity-Editor-2018.3")
     .IsDependentOn("Find-Latest-Unity-Editor");
+
+RunTarget("Default");
 ```
 
 Older API Example
