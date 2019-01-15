@@ -24,6 +24,11 @@ namespace Cake.Unity
         public FilePath BuildWindowsPlayer { get; set; }
 
         /// <summary>
+        /// Execute the static method as soon as Unity opens the project, and after the optional Asset server update is complete. You can use this to do tasks such as continous integration, performing Unit Tests, making builds or preparing data. To return an error from the command line process, either throw an exception which causes Unity to exit with return code 1, or call EditorApplication.Exit with a non-zero return code. To pass parameters, add them to the command line and retrieve them inside the function using System.Environment.GetCommandLineArgs. To use -executeMethod, you need to place the enclosing script in an Editor folder. The method you execute must be defined as static.
+        /// </summary>
+        public string ExecuteMethod { get; set; }
+
+        /// <summary>
         /// Specify where the Editor or Windows/Linux/OSX standalone log file are written. If the path is ommitted, OSX and Linux will write output to the console. Windows uses the path %LOCALAPPDATA%\Unity\Editor\Editor.log as a default.
         /// </summary>
         public FilePath LogFile { get; set; }
@@ -62,6 +67,11 @@ namespace Cake.Unity
                 builder
                     .Append("-buildWindowsPlayer")
                     .AppendQuoted(BuildWindowsPlayer.MakeAbsolute(environment).FullPath);
+
+            if (ExecuteMethod != null)
+                builder
+                    .Append("-executeMethod")
+                    .Append(ExecuteMethod);
 
             if (LogFile != null)
                 builder

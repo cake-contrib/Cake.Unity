@@ -17,18 +17,26 @@ let setBatchMode value (arguments : UnityEditorArguments) =
     arguments.BatchMode <- value
     arguments
 
+let setExecuteMethod value (arguments : UnityEditorArguments) =
+    arguments.ExecuteMethod <- value
+    arguments
+
 [<Test>]
 let ``CLI arguments with enabled BatchMode should contain "-batchmode"`` () =
     () |> UnityEditorArguments |> setBatchMode true |> commandLineArguments |> should haveSubstring "-batchmode"
 
 [<Test>]
-let ``CLI arguments with custom argument "age" equal 18 should contain "--age=18"`` () =
+let ``CLI arguments with custom argument "age" of value 18 should contain "--age=18"`` () =
     let arguments = UnityEditorArguments ()
     arguments.Custom?age <- 18
     arguments |> commandLineArguments |> should haveSubstring "--age=18"
 
 [<Test>]
-let ``CLI arguments with custom argument "login" equal "admin" should contain "--login=admin"`` () =
+let ``CLI arguments with custom argument "login" of value "admin" should contain "--login=admin"`` () =
     let arguments = UnityEditorArguments ()
     arguments.Custom?login <- "admin"
     arguments |> commandLineArguments |> should haveSubstring "--login=admin"
+
+[<Test>]
+let ``CLI arguments with ExecuteMethod "Game.Build.Run" should contain "-executeMethod Game.Build.Run"`` () =
+    () |> UnityEditorArguments |> setExecuteMethod "Game.Build.Run" |> commandLineArguments |> should haveSubstring "-executeMethod Game.Build.Run"
