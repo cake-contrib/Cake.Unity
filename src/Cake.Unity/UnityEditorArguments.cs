@@ -1,4 +1,5 @@
-﻿using Cake.Core;
+﻿using System.Dynamic;
+using Cake.Core;
 using Cake.Core.IO;
 
 namespace Cake.Unity
@@ -8,10 +9,12 @@ namespace Cake.Unity
     /// </summary>
     public class UnityEditorArguments
     {
+        private readonly ExpandoObject customArguments = new ExpandoObject();
+
         /// <summary>
-        /// <para>Run Unity in batch mode. You should always use this in conjunction with the other command line arguments, because it ensures no pop-up windows appear and eliminates the need for any human intervention. When an exception occurs during execution of the script code, the Asset server updates fail, or other operations fail, Unity immediately exits with return code 1.</para>
-        /// <para>Note that in batch mode, Unity sends a minimal version of its log output to the console. However, the Log Files still contain the full log information. You cannot open a project in batch mode while the Editor has the same project open; only a single instance of Unity can run at a time.</para>
-        /// <para>Tip: To check whether you are running the Editor or Standalone Player in batch mode, use the Application.isBatchMode operator.</para>
+        /// <para>Run Unity in batch mode. You should always use this in conjunction with the other command line arguments, because it ensures no pop-up windows appear and eliminates the need for any human intervention. When an exception occurs during execution of the script code, the Asset server updates fail, or other operations fail, Unity immediately exits with return code 1. </para>
+        /// <para>Note that in batch mode, Unity sends a minimal version of its log output to the console. However, the Log Files still contain the full log information. You cannot open a project in batch mode while the Editor has the same project open; only a single instance of Unity can run at a time. </para>
+        /// <para>Tip: To check whether you are running the Editor or Standalone Player in batch mode, use the Application.isBatchMode operator. </para>
         /// </summary>
         public bool BatchMode { get; set; }
 
@@ -34,6 +37,20 @@ namespace Cake.Unity
         /// Quit the Unity Editor after other commands have finished executing. Note that this can cause error messages to be hidden (however, they still appear in the Editor.log file).
         /// </summary>
         public bool Quit { get; set; }
+
+        /// <summary>
+        /// <para>Custom arguments which can further be processed in Unity Editor script by calling System.Environment.GetCommandLineArgs method. </para>
+        /// <para>They are supplied among other arguments in format "--key=value". </para>
+        /// <para>Expected to be used in conjunction with ExecuteMethod argument. </para>
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var arguments = new UnityEditorArguments { ExecuteMethod = "Build.RunCommandLineBuild" };
+        /// arguments.Custom.buildNumber = 42;
+        /// arguments.Custom.packageTitle = "Game of Builds";
+        /// </code>
+        /// </example>
+        public dynamic Custom => customArguments;
 
         internal ProcessArgumentBuilder CustomizeCommandLineArguments(ProcessArgumentBuilder builder, ICakeEnvironment environment)
         {
@@ -59,6 +76,10 @@ namespace Cake.Unity
             if (Quit)
                 builder
                     .Append("-quit");
+
+            foreach (var customArgument in customArguments)
+                builder
+                    .Append($"--{customArgument.Key}={customArgument.Value}");
 
             return builder;
         }
