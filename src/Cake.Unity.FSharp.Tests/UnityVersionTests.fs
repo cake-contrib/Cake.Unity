@@ -1,4 +1,4 @@
-﻿module UnityVersionTests
+﻿module Cake.Unity.Tests.UnityVersionTests
 
 open FsUnit.TopLevelOperators
 open NUnit.Framework
