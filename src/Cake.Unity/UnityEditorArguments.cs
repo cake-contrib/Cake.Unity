@@ -17,7 +17,7 @@ namespace Cake.Unity
         /// <para>Note that in batch mode, Unity sends a minimal version of its log output to the console. However, the Log Files still contain the full log information. You cannot open a project in batch mode while the Editor has the same project open; only a single instance of Unity can run at a time. </para>
         /// <para>Tip: To check whether you are running the Editor or Standalone Player in batch mode, use the Application.isBatchMode operator. </para>
         /// </summary>
-        public bool BatchMode { get; set; }
+        public bool BatchMode { get; set; } = true;
 
         /// <summary>
         /// Build a 32-bit standalone Windows player (for example, -buildWindowsPlayer path/to/your/build.exe).
@@ -42,7 +42,7 @@ namespace Cake.Unity
         /// <summary>
         /// Quit the Unity Editor after other commands have finished executing. Note that this can cause error messages to be hidden (however, they still appear in the Editor.log file).
         /// </summary>
-        public bool Quit { get; set; }
+        public bool Quit { get; set; } = true;
 
         /// <summary>
         /// <para>Custom arguments which can further be processed in Unity Editor script by calling System.Environment.GetCommandLineArgs method. </para>
