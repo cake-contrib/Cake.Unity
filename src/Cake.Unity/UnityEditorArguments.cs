@@ -1,4 +1,5 @@
-﻿using System.Dynamic;
+﻿using System;
+using System.Dynamic;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -56,6 +57,26 @@ namespace Cake.Unity
         /// </code>
         /// </example>
         public dynamic Custom => customArguments;
+
+        /// <summary>
+        /// <para>Custom arguments which can further be processed in Unity Editor script by calling System.Environment.GetCommandLineArgs method. </para>
+        /// <para>They are supplied among other arguments in format "--key=value". </para>
+        /// <para>Expected to be used in conjunction with ExecuteMethod argument. </para>
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// new UnityEditorArguments
+        /// {
+        ///     ExecuteMethod = "Build.RunCommandLineBuild",
+        ///     SetCustomArguments = x =>
+        ///     {
+        ///         x.buildNumber = 42;
+        ///         x.packageTitle = "Game of Builds";
+        ///     },
+        /// };
+        /// </code>
+        /// </example>
+        public Action<dynamic> SetCustomArguments { set => value.Invoke(customArguments); }
 
         internal ProcessArgumentBuilder CustomizeCommandLineArguments(ProcessArgumentBuilder builder, ICakeEnvironment environment)
         {
