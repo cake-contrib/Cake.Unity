@@ -40,3 +40,11 @@ let ``CLI arguments with custom argument "login" of value "admin" should contain
 [<Test>]
 let ``CLI arguments with ExecuteMethod "Game.Build.Run" should contain "-executeMethod Game.Build.Run"`` () =
     () |> UnityEditorArguments |> setExecuteMethod "Game.Build.Run" |> commandLineArguments |> should haveSubstring "-executeMethod Game.Build.Run"
+
+[<Test>]
+let ``default BatchMode value should be true`` () =
+    UnityEditorArguments().BatchMode |> should equal true
+
+[<Test>]
+let ``default Quit value should be true`` () =
+    UnityEditorArguments().Quit |> should equal true

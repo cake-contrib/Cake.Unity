@@ -48,7 +48,7 @@ namespace Cake.Unity
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
         public static void UnityEditor(this ICakeContext context, FilePath unityEditorPath, UnityEditorArguments arguments) =>
-            new UnityEditor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools)
+            new UnityEditor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log)
                 .Run(unityEditorPath, arguments);
 
         /// <summary>
