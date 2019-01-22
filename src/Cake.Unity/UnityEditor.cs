@@ -67,14 +67,18 @@ namespace Cake.Unity
             {
                 if (IsError(line))
                     log.Error(line);
+                else if (IsWarning(line))
+                    log.Warning(line);
                 else
                     log.Information(line);
             }
         }
 
         private static bool IsError(string line) => IsCSharpCompilerError(line);
+        private static bool IsWarning(string line) => IsCSharpCompilerWarning(line);
 
         private static bool IsCSharpCompilerError(string line) => line.Contains(": error CS");
+        private static bool IsCSharpCompilerWarning(string line) => line.Contains(": warning CS");
 
         private static IEnumerable<string> ReadLogSafe(IFile file)
         {
