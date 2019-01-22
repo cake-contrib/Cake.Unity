@@ -65,9 +65,16 @@ namespace Cake.Unity
 
             foreach (var line in ReadLogSafe(logFile))
             {
-                log.Information(line);
+                if (IsError(line))
+                    log.Error(line);
+                else
+                    log.Information(line);
             }
         }
+
+        private static bool IsError(string line) => IsCSharpCompilerError(line);
+
+        private static bool IsCSharpCompilerError(string line) => line.Contains(": error CS");
 
         private static IEnumerable<string> ReadLogSafe(IFile file)
         {
