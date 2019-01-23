@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -7,7 +10,7 @@ using Cake.Core.Tooling;
 
 namespace Cake.Unity
 {
-    internal class UnityEditor : Tool<UnityEditorSettings>
+    internal class UnityEditor : Tool<UnityEditorToolSettings>
     {
         private readonly IFileSystem fileSystem;
         private readonly ICakeEnvironment environment;
@@ -25,13 +28,39 @@ namespace Cake.Unity
 
         protected override IEnumerable<string> GetToolExecutableNames() => new[] { "Unity.exe" };
 
-        public void Run(FilePath unityEditorPath, UnityEditorArguments arguments)
+        public void Run(FilePath unityEditorPath, UnityEditorArguments arguments, UnityEditorSettings settings)
         {
-            WarnIfLogLocationNotSet(arguments);
+            ErrorIfRealTimeLogSetButLogFileNotSet(settings, arguments);
+            WarnIfLogFileNotSet(arguments);
 
+            if (settings.RealTimeLog && arguments.LogFile != null)
+                RunWithRealTimeLog(unityEditorPath, arguments);
+            else
+                RunWithLogForwardOnError(unityEditorPath, arguments);
+        }
+
+        private void RunWithRealTimeLog(FilePath unityEditorPath, UnityEditorArguments arguments)
+        {
+            var logForwardCancellation = new CancellationTokenSource();
+
+            var process = RunProcess(ToolSettings(unityEditorPath, arguments));
+
+            Task.Run(() =>
+            {
+                process.WaitForExit();
+                logForwardCancellation.Cancel();
+            });
+
+            ForwardLogFileToOutputUntilCancel(arguments.LogFile, logForwardCancellation.Token);
+
+            ProcessExitCode(process.GetExitCode());
+        }
+
+        private void RunWithLogForwardOnError(FilePath unityEditorPath, UnityEditorArguments arguments)
+        {
             try
             {
-                Run(new UnityEditorSettings(arguments, environment) { ToolPath = unityEditorPath });
+                Run(ToolSettings(unityEditorPath, arguments));
             }
             catch
             {
@@ -44,16 +73,26 @@ namespace Cake.Unity
                 {
                     log.Error("Execution of Unity Editor failed.");
                     log.Error("Please analyze log below for the reasons of failure.");
-                    ForwardLogFileToOutput(arguments.LogFile);
+                    ForwardLogFileToOutputInOnePass(arguments.LogFile);
                 }
 
                 throw;
             }
         }
 
-        private void Run(UnityEditorSettings settings) => Run(settings, new ProcessArgumentBuilder());
+        private UnityEditorToolSettings ToolSettings(FilePath unityEditorPath, UnityEditorArguments arguments) =>
+            new UnityEditorToolSettings(arguments, environment) { ToolPath = unityEditorPath };
 
-        private void ForwardLogFileToOutput(FilePath logPath)
+        private void Run(UnityEditorToolSettings settings) => Run(settings, new ProcessArgumentBuilder());
+        private IProcess RunProcess(UnityEditorToolSettings settings) => RunProcess(settings, new ProcessArgumentBuilder());
+
+        private void ForwardLogFileToOutputUntilCancel(FilePath logPath, CancellationToken cancellationToken)
+        {
+            foreach (var line in ReadLogUntilCancel(logPath, cancellationToken))
+                ForwardLogLineToOutput(line);
+        }
+
+        private void ForwardLogFileToOutputInOnePass(FilePath logPath)
         {
             var logFile = fileSystem.GetFile(logPath);
 
@@ -63,15 +102,18 @@ namespace Cake.Unity
                 return;
             }
 
-            foreach (var line in ReadLogSafe(logFile))
-            {
-                if (IsError(line))
-                    log.Error(line);
-                else if (IsWarning(line))
-                    log.Warning(line);
-                else
-                    log.Information(line);
-            }
+            foreach (var line in ReadLogSafeInOnePass(logFile))
+                ForwardLogLineToOutput(line);
+        }
+
+        private void ForwardLogLineToOutput(string line)
+        {
+            if (IsError(line))
+                log.Error(line);
+            else if (IsWarning(line))
+                log.Warning(line);
+            else
+                log.Information(line);
         }
 
         private static bool IsError(string line) => IsCSharpCompilerError(line);
@@ -80,7 +122,37 @@ namespace Cake.Unity
         private static bool IsCSharpCompilerError(string line) => line.Contains(": error CS");
         private static bool IsCSharpCompilerWarning(string line) => line.Contains(": warning CS");
 
-        private static IEnumerable<string> ReadLogSafe(IFile file)
+        private IEnumerable<string> ReadLogUntilCancel(FilePath logPath, CancellationToken cancellationToken)
+        {
+            bool LogExists() => fileSystem.Exist(logPath);
+            bool ShouldWork() => !cancellationToken.IsCancellationRequested;
+            void Sleep() => Thread.Sleep(TimeSpan.FromSeconds(1));
+
+            while (!LogExists() && ShouldWork())
+                Sleep();
+
+            if (!LogExists())
+            {
+                log.Warning("Unity Editor log file not found: {0}", logPath);
+                yield break;
+            }
+
+            using (var stream = fileSystem.GetFile(logPath).Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var reader = new StreamReader(stream))
+            {
+                bool HasLinesToRead() => !reader.EndOfStream;
+
+                while (HasLinesToRead() || ShouldWork())
+                {
+                    if (HasLinesToRead())
+                        yield return reader.ReadLine();
+                    else
+                        Sleep();
+                }
+            }
+        }
+
+        private static IEnumerable<string> ReadLogSafeInOnePass(IFile file)
         {
             using (var stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             using (var reader = new StreamReader(stream))
@@ -88,7 +160,15 @@ namespace Cake.Unity
                     yield return reader.ReadLine();
         }
 
-        private void WarnIfLogLocationNotSet(UnityEditorArguments arguments)
+        private void ErrorIfRealTimeLogSetButLogFileNotSet(UnityEditorSettings settings, UnityEditorArguments arguments)
+        {
+            if (settings.RealTimeLog && arguments.LogFile == null)
+            {
+                log.Error("Cannot forward log in real time because LogFile is not specified.");
+            }
+        }
+
+        private void WarnIfLogFileNotSet(UnityEditorArguments arguments)
         {
             if (arguments.LogFile == null)
             {
