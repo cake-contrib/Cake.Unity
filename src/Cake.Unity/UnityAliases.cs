@@ -108,21 +108,22 @@ namespace Cake.Unity
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
         public static void UnityEditor(this ICakeContext context,
-            UnityEditorDescriptor unityEditor, UnityEditorArguments arguments, UnityEditorSettings settings = new UnityEditorSettings()) =>
+            UnityEditorDescriptor unityEditor, UnityEditorArguments arguments, UnityEditorSettings settings = null) =>
             new UnityEditor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log)
-                .Run(unityEditor, arguments, settings);
+                .Run(unityEditor, arguments, settings ?? new UnityEditorSettings());
 
         /// <summary>
         /// <para>Executes Unity Editor via command-line interface.</para>
         /// <para>Determines Unity Editor location automatically by specified version.</para>
         /// </summary>
-        /// <param name="version">Year and stream parts of Unity version aka major and minor.</param>
+        /// <param name="versionYear">Year part of Unity version aka major version.</param>
+        /// <param name="versionStream">Stream part of Unity version aka minor version.</param>
         /// <param name="arguments">Unity Editor command-line arguments.</param>
         /// <param name="settings">Optional settings which affect how Unity Editor should be executed.</param>
         /// <example>
         /// <code>
         /// UnityEditor(
-        ///     (2018, 3),
+        ///     2018, 3,
         ///     new UnityEditorArguments
         ///     {
         ///         ProjectPath = "A:/UnityProject",
@@ -138,13 +139,13 @@ namespace Cake.Unity
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
         public static void UnityEditor(this ICakeContext context,
-            (int year, int stream) version, UnityEditorArguments arguments, UnityEditorSettings settings = new UnityEditorSettings()) =>
+            int versionYear, int versionStream, UnityEditorArguments arguments, UnityEditorSettings settings = null) =>
             new UnityEditor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log)
                 .Run(
-                    context.FindUnityEditor(version.year, version.stream)
-                    ?? throw new Exception($"Failed to locate Unity Editor {version.year}.{version.stream}. Try to specify it's path explicitly."),
+                    context.FindUnityEditor(versionYear, versionStream)
+                    ?? throw new Exception($"Failed to locate Unity Editor {versionYear}.{versionStream}. Try to specify it's path explicitly."),
                     arguments,
-                    settings);
+                    settings ?? new UnityEditorSettings());
 
         /// <summary>
         /// <para>Executes Unity Editor via command-line interface.</para>
@@ -172,13 +173,13 @@ namespace Cake.Unity
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
         public static void UnityEditor(this ICakeContext context,
-            int versionYear, UnityEditorArguments arguments, UnityEditorSettings settings = new UnityEditorSettings()) =>
+            int versionYear, UnityEditorArguments arguments, UnityEditorSettings settings = null) =>
             new UnityEditor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log)
                 .Run(
                     context.FindUnityEditor(versionYear)
                     ?? throw new Exception($"Failed to locate Unity Editor {versionYear}. Try to specify it's path explicitly."),
                     arguments,
-                    settings);
+                    settings ?? new UnityEditorSettings());
 
         /// <summary>
         /// <para>Executes Unity Editor via command-line interface.</para>
@@ -204,13 +205,13 @@ namespace Cake.Unity
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
         public static void UnityEditor(this ICakeContext context,
-            UnityEditorArguments arguments, UnityEditorSettings settings = new UnityEditorSettings()) =>
+            UnityEditorArguments arguments, UnityEditorSettings settings = null) =>
             new UnityEditor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log)
                 .Run(
                     context.FindUnityEditor()
                     ?? throw new Exception("Failed to locate Unity Editor. Try to specify it's path explicitly."),
                     arguments,
-                    settings);
+                    settings ?? new UnityEditorSettings());
 
 
 
