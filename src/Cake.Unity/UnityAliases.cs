@@ -27,6 +27,8 @@ namespace Cake.Unity
             tool.Run(context, projectPath, platform);
         }
 
+
+
         /// <summary>
         /// Executes Unity Editor via command-line interface.
         /// </summary>
@@ -35,21 +37,183 @@ namespace Cake.Unity
         /// <example>
         /// <code>
         /// var unityEditor = FindUnityEditor(2018, 3) ?? throw new Exception("Cannot find Unity Editor 2018.3.");
+        /// 
         /// UnityEditor(unityEditor.Path, new UnityEditorArguments
         /// {
-        ///     BatchMode = true,
         ///     ProjectPath = "A:/UnityProject",
         ///     BuildWindowsPlayer = "A:/Build/game.exe",
         ///     LogFile = "A:/Build/unity.log",
-        ///     Quit = true,
         /// });
         /// </code>
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Build")]
-        public static void UnityEditor(this ICakeContext context, FilePath unityEditorPath, UnityEditorArguments arguments) =>
+        public static void UnityEditor(this ICakeContext context,
+            FilePath unityEditorPath, UnityEditorArguments arguments) =>
+            UnityEditor(context, unityEditorPath, arguments, new UnityEditorSettings());
+
+        /// <summary>
+        /// Executes Unity Editor via command-line interface.
+        /// </summary>
+        /// <param name="unityEditorPath">Path to Unity Editor executable.</param>
+        /// <param name="arguments">Unity Editor command-line arguments.</param>
+        /// <param name="settings">Settings which affect how Unity Editor should be executed.</param>
+        /// <example>
+        /// <code>
+        /// var unityEditor = FindUnityEditor(2018, 3) ?? throw new Exception("Cannot find Unity Editor 2018.3.");
+        /// 
+        /// UnityEditor(
+        ///     unityEditor.Path,
+        ///     new UnityEditorArguments
+        ///     {
+        ///         ProjectPath = "A:/UnityProject",
+        ///         BuildWindowsPlayer = "A:/Build/game.exe",
+        ///         LogFile = "A:/Build/unity.log",
+        ///     },
+        ///     new UnityEditorSettings
+        ///     {
+        ///         RealTimeLog = true,
+        ///     });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Build")]
+        public static void UnityEditor(this ICakeContext context,
+            FilePath unityEditorPath, UnityEditorArguments arguments, UnityEditorSettings settings) =>
             new UnityEditor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log)
-                .Run(unityEditorPath, arguments);
+                .Run(unityEditorPath, arguments, settings);
+
+        /// <summary>
+        /// Executes Unity Editor via command-line interface.
+        /// </summary>
+        /// <param name="unityEditor">Unity Editor descriptor provided by a FindUnityEditor method.</param>
+        /// <param name="arguments">Unity Editor command-line arguments.</param>
+        /// <param name="settings">Optional settings which affect how Unity Editor should be executed.</param>
+        /// <example>
+        /// <code>
+        /// UnityEditor(
+        ///     FindUnityEditor(2018, 3) ?? throw new Exception("Cannot find Unity Editor 2018.3."),
+        ///     new UnityEditorArguments
+        ///     {
+        ///         ProjectPath = "A:/UnityProject",
+        ///         BuildWindowsPlayer = "A:/Build/game.exe",
+        ///         LogFile = "A:/Build/unity.log",
+        ///     },
+        ///     new UnityEditorSettings
+        ///     {
+        ///         RealTimeLog = true,
+        ///     });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Build")]
+        public static void UnityEditor(this ICakeContext context,
+            UnityEditorDescriptor unityEditor, UnityEditorArguments arguments, UnityEditorSettings settings = null) =>
+            new UnityEditor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log)
+                .Run(unityEditor, arguments, settings ?? new UnityEditorSettings());
+
+        /// <summary>
+        /// <para>Executes Unity Editor via command-line interface.</para>
+        /// <para>Determines Unity Editor location automatically by specified version.</para>
+        /// </summary>
+        /// <param name="versionYear">Year part of Unity version aka major version.</param>
+        /// <param name="versionStream">Stream part of Unity version aka minor version.</param>
+        /// <param name="arguments">Unity Editor command-line arguments.</param>
+        /// <param name="settings">Optional settings which affect how Unity Editor should be executed.</param>
+        /// <example>
+        /// <code>
+        /// UnityEditor(
+        ///     2018, 3,
+        ///     new UnityEditorArguments
+        ///     {
+        ///         ProjectPath = "A:/UnityProject",
+        ///         BuildWindowsPlayer = "A:/Build/game.exe",
+        ///         LogFile = "A:/Build/unity.log",
+        ///     },
+        ///     new UnityEditorSettings
+        ///     {
+        ///         RealTimeLog = true,
+        ///     });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Build")]
+        public static void UnityEditor(this ICakeContext context,
+            int versionYear, int versionStream, UnityEditorArguments arguments, UnityEditorSettings settings = null) =>
+            new UnityEditor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log)
+                .Run(
+                    context.FindUnityEditor(versionYear, versionStream)
+                    ?? throw new Exception($"Failed to locate Unity Editor {versionYear}.{versionStream}. Try to specify it's path explicitly."),
+                    arguments,
+                    settings ?? new UnityEditorSettings());
+
+        /// <summary>
+        /// <para>Executes Unity Editor via command-line interface.</para>
+        /// <para>Determines Unity Editor location automatically by specified version.</para>
+        /// </summary>
+        /// <param name="versionYear">Year part of Unity version aka major version.</param>
+        /// <param name="arguments">Unity Editor command-line arguments.</param>
+        /// <param name="settings">Optional settings which affect how Unity Editor should be executed.</param>
+        /// <example>
+        /// <code>
+        /// UnityEditor(
+        ///     2018,
+        ///     new UnityEditorArguments
+        ///     {
+        ///         ProjectPath = "A:/UnityProject",
+        ///         BuildWindowsPlayer = "A:/Build/game.exe",
+        ///         LogFile = "A:/Build/unity.log",
+        ///     },
+        ///     new UnityEditorSettings
+        ///     {
+        ///         RealTimeLog = true,
+        ///     });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Build")]
+        public static void UnityEditor(this ICakeContext context,
+            int versionYear, UnityEditorArguments arguments, UnityEditorSettings settings = null) =>
+            new UnityEditor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log)
+                .Run(
+                    context.FindUnityEditor(versionYear)
+                    ?? throw new Exception($"Failed to locate Unity Editor {versionYear}. Try to specify it's path explicitly."),
+                    arguments,
+                    settings ?? new UnityEditorSettings());
+
+        /// <summary>
+        /// <para>Executes Unity Editor via command-line interface.</para>
+        /// <para>Determines location of latest available Unity Editor automatically.</para>
+        /// </summary>
+        /// <param name="arguments">Unity Editor command-line arguments.</param>
+        /// <param name="settings">Optional settings which affect how Unity Editor should be executed.</param>
+        /// <example>
+        /// <code>
+        /// UnityEditor(
+        ///     new UnityEditorArguments
+        ///     {
+        ///         ProjectPath = "A:/UnityProject",
+        ///         BuildWindowsPlayer = "A:/Build/game.exe",
+        ///         LogFile = "A:/Build/unity.log",
+        ///     },
+        ///     new UnityEditorSettings
+        ///     {
+        ///         RealTimeLog = true,
+        ///     });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Build")]
+        public static void UnityEditor(this ICakeContext context,
+            UnityEditorArguments arguments, UnityEditorSettings settings = null) =>
+            new UnityEditor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log)
+                .Run(
+                    context.FindUnityEditor()
+                    ?? throw new Exception("Failed to locate Unity Editor. Try to specify it's path explicitly."),
+                    arguments,
+                    settings ?? new UnityEditorSettings());
+
+
 
         /// <summary>
         /// Locates installed Unity Editor with latest version.

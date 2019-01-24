@@ -8,6 +8,27 @@ The API is not in any way final and will change.
 
 Examples
 -------
+
+```csharp
+#addin Cake.Unity
+
+Task("Default").Does(() =>
+    UnityEditor(
+        2018, 3,
+        new UnityEditorArguments
+        {
+            ProjectPath = "A:/UnityProject",
+            BuildWindowsPlayer = "A:/Build/game.exe",
+            LogFile = "A:/Build/unity.log",
+        },
+        new UnityEditorSettings
+        {
+            RealTimeLog = true,
+        }));
+
+RunTarget("Default");
+```
+
 ```csharp
 #addin Cake.Unity
 

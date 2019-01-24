@@ -33,6 +33,7 @@ namespace Cake.Unity
             var candidates = globber.GetFiles(searchPattern).ToList();
 
             log.Debug("Found {0} candidates.", candidates.Count);
+            log.Debug(string.Empty);
 
             var editors =
                 from candidatePath in candidates
@@ -45,7 +46,6 @@ namespace Cake.Unity
 
         private UnityVersion DetermineVersion(FilePath editorPath)
         {
-            log.Debug(string.Empty);
             log.Debug("Determining version of Unity Editor at path {0}...", editorPath);
 
             var fileVersion = FileVersionInfo.GetVersionInfo(editorPath.FullPath);
@@ -54,10 +54,10 @@ namespace Cake.Unity
 
             if (year <= 0 || stream <= 0 || update < 0)
             {
-                log.Warning(
-                    "Unity Editor file version {0} at path {1} is incorrect. Expected first two parts to be positive numbers and third one to be non negative.",
-                    $"{year}.{stream}.{update}.{fileVersion.FilePrivatePart}",
-                    editorPath.FullPath);
+                log.Warning("Unity Editor file version {0} is incorrect.", $"{year}.{stream}.{update}.{fileVersion.FilePrivatePart}");
+                log.Warning("Expected first two numbers to be positive and third one to be non negative.");
+                log.Warning("Path: {0}", editorPath.FullPath);
+                log.Warning(string.Empty);
                 return null;
             }
 
@@ -69,12 +69,14 @@ namespace Cake.Unity
             {
                 var version = new UnityVersion(year, stream, update, suffix.Value.character, suffix.Value.number);
                 log.Debug("Result Unity Editor version (full): {0}", version);
+                log.Debug(string.Empty);
                 return version;
             }
             else
             {
                 var version = new UnityVersion(year, stream, update);
                 log.Debug("Result Unity Editor version (short): {0}", version);
+                log.Debug(string.Empty);
                 return version;
             }
         }
