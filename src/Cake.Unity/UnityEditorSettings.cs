@@ -1,11 +1,11 @@
-﻿using Cake.Core;
-using Cake.Core.Tooling;
-
-namespace Cake.Unity
+﻿namespace Cake.Unity
 {
-    internal class UnityEditorSettings : ToolSettings
+    public class UnityEditorSettings
     {
-        public UnityEditorSettings(UnityEditorArguments arguments, ICakeEnvironment environment) =>
-            ArgumentCustomization = builder => arguments.CustomizeCommandLineArguments(builder, environment);
+        /// <summary>
+        /// <para>Forwards log file to output in real time.</para>
+        /// <para>Requires LogFile argument to be specified.</para>
+        /// </summary>
+        public bool RealTimeLog { get; set; }
     }
 }
