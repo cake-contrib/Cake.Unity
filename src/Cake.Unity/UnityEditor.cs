@@ -28,6 +28,9 @@ namespace Cake.Unity
 
         protected override IEnumerable<string> GetToolExecutableNames() => new[] { "Unity.exe" };
 
+        public void Run(UnityEditorDescriptor unityEditor, UnityEditorArguments arguments, UnityEditorSettings settings) =>
+            Run(unityEditor.Path, arguments, settings);
+
         public void Run(FilePath unityEditorPath, UnityEditorArguments arguments, UnityEditorSettings settings)
         {
             ErrorIfRealTimeLogSetButLogFileNotSet(settings, arguments);

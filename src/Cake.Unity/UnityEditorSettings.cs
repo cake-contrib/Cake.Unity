@@ -1,6 +1,6 @@
 ﻿namespace Cake.Unity
 {
-    public class UnityEditorSettings
+    public struct UnityEditorSettings
     {
         /// <summary>
         /// <para>Forwards log file to output in real time.</para>
