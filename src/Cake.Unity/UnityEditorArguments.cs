@@ -2,6 +2,7 @@
 using System.Dynamic;
 using Cake.Core;
 using Cake.Core.IO;
+using Cake.Unity.Arguments;
 
 namespace Cake.Unity
 {
@@ -18,6 +19,11 @@ namespace Cake.Unity
         /// <para>Tip: To check whether you are running the Editor or Standalone Player in batch mode, use the Application.isBatchMode operator. </para>
         /// </summary>
         public bool BatchMode { get; set; } = true;
+
+        /// <summary>
+        /// Allows the selection of an active build target before loading a project.
+        /// </summary>
+        public BuildTarget? BuildTarget { get; set; }
 
         /// <summary>
         /// Build a 32-bit standalone Windows player (for example, -buildWindowsPlayer path/to/your/build.exe).
@@ -83,6 +89,11 @@ namespace Cake.Unity
             if (BatchMode)
                 builder
                     .Append("-batchmode");
+
+            if (BuildTarget.HasValue)
+                builder
+                    .Append("-buildTarget")
+                    .Append(BuildTarget.Value.ToString());
 
             if (BuildWindowsPlayer != null)
                 builder

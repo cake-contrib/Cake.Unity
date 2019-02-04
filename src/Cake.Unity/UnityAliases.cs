@@ -48,6 +48,7 @@ namespace Cake.Unity
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Execute")]
+        [CakeNamespaceImport("Cake.Unity.Arguments")]
         public static void UnityEditor(this ICakeContext context,
             FilePath unityEditorPath, UnityEditorArguments arguments) =>
             UnityEditor(context, unityEditorPath, arguments, new UnityEditorSettings());
@@ -78,6 +79,7 @@ namespace Cake.Unity
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Execute")]
+        [CakeNamespaceImport("Cake.Unity.Arguments")]
         public static void UnityEditor(this ICakeContext context,
             FilePath unityEditorPath, UnityEditorArguments arguments, UnityEditorSettings settings) =>
             new UnityEditor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log)
@@ -107,6 +109,7 @@ namespace Cake.Unity
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Execute")]
+        [CakeNamespaceImport("Cake.Unity.Arguments")]
         public static void UnityEditor(this ICakeContext context,
             UnityEditorDescriptor unityEditor, UnityEditorArguments arguments, UnityEditorSettings settings = null) =>
             new UnityEditor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log)
@@ -138,6 +141,7 @@ namespace Cake.Unity
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Execute")]
+        [CakeNamespaceImport("Cake.Unity.Arguments")]
         public static void UnityEditor(this ICakeContext context,
             int versionYear, int versionStream, UnityEditorArguments arguments, UnityEditorSettings settings = null) =>
             new UnityEditor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log)
@@ -172,6 +176,7 @@ namespace Cake.Unity
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Execute")]
+        [CakeNamespaceImport("Cake.Unity.Arguments")]
         public static void UnityEditor(this ICakeContext context,
             int versionYear, UnityEditorArguments arguments, UnityEditorSettings settings = null) =>
             new UnityEditor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log)
@@ -204,6 +209,7 @@ namespace Cake.Unity
         /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Execute")]
+        [CakeNamespaceImport("Cake.Unity.Arguments")]
         public static void UnityEditor(this ICakeContext context,
             UnityEditorArguments arguments, UnityEditorSettings settings = null) =>
             new UnityEditor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log)
