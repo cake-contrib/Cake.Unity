@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Dynamic;
-using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Unity.Arguments;
@@ -111,17 +110,17 @@ namespace Cake.Unity
         /// <summary>
         /// Windows only. Make the Editor use Direct3D 11 for rendering. Normally the graphics API depends on Player settings(typically defaults to D3D11).
         /// </summary>
-        public bool ForceD3D11 { get; set; } = false;
+        public bool ForceD3D11 { get; set; }
 
         /// <summary>
         /// MacOS only. When using Metal, make the Editor use a particular GPU device by passing it the index of that GPU.
         /// </summary>
-        public bool ForceDeviceIndex { get; set; } = false;
+        public bool ForceDeviceIndex { get; set; }
 
         /// <summary>
         /// MacOS only. Make the Editor use Metal as the default graphics API.
         /// </summary>
-        public bool ForceGfxMetal { get; set; } = false;
+        public bool ForceGfxMetal { get; set; }
 
         /// <summary>
         /// Make the Editor use OpenGL core profile for rendering.
@@ -136,17 +135,17 @@ namespace Cake.Unity
         /// <summary>
         /// Used with -force-glcoreXY to prevent checking for additional OpenGL extensions, allowing it to run between platforms with the same code paths.
         /// </summary>
-        public bool ForceClamped { get; set; } = false;
+        public bool ForceClamped { get; set; }
 
         /// <summary>
         /// Make the Editor run as if there is a free Unity license on the machine, even if a Unity Pro license is installed.
         /// </summary>
-        public bool ForceFree { get; set; } = false;
+        public bool ForceFree { get; set; }
 
         /// <summary>
         /// MacOS only. When using Metal, make the Editor use a low power device.
         /// </summary>
-        public bool ForceLowPowerDevice { get; set; } = false;
+        public bool ForceLowPowerDevice { get; set; }
 
         /// <summary>
         /// Import the given package. No import dialog is shown.
@@ -161,12 +160,12 @@ namespace Cake.Unity
         /// <summary>
         /// When running in batch mode, do not initialize the graphics device at all. This makes it possible to run your automated workflows on machines that don’t even have a GPU (automated workflows only work when you have a window in focus, otherwise you can’t send simulated input commands). Note that -nographics does not allow you to bake GI, because Enlighten requires GPU acceleration.
         /// </summary>
-        public bool NoGraphics { get; set; } = false;
+        public bool NoGraphics { get; set; }
 
         /// <summary>
         /// Disables the Unity Package Manager.
         /// </summary>
-        public bool NoUPM { get; set; } = false;
+        public bool NoUPM { get; set; }
 
         /// <summary>
         /// Enter a password into the log-in form during activation of the Unity Editor.
@@ -186,12 +185,12 @@ namespace Cake.Unity
         /// <summary>
         /// Return the currently active license to the license server. Please allow a few seconds before the license file is removed, because Unity needs to communicate with the license server.
         /// </summary>
-        public bool ReturnLicense { get; set; } = false;
+        public bool ReturnLicense { get; set; }
 
         /// <summary>
         /// Run Editor tests from the project. This argument requires the projectPath, and it’s good practice to run it with batchmode argument. quit is not required, because the Editor automatically closes down after the run is finished.
         /// </summary>
-        public bool RunEditorTests { get; set; } = false;
+        public bool RunEditorTests { get; set; }
 
         /// <summary>
         /// Activate Unity with the specified serial key. It is good practice to pass the -batchmode and -quit arguments as well, in order to quit Unity when done, if using this for automated activation of Unity. Please allow a few seconds before the license file is created, because Unity needs to communicate with the license server. Make sure that license file folder exists, and has appropriate permissions before running Unity with this argument. If activation fails, see the Editor.log for info.
@@ -206,7 +205,7 @@ namespace Cake.Unity
         /// <summary>
         /// Prevent Unity from displaying the dialog that appears when a Standalone Player crashes. This argument is useful when you want to run the Player in automated builds or tests, where you don’t want a dialog prompt to obstruct automation.
         /// </summary>
-        public bool SilentCrashes { get; set; } = false;
+        public bool SilentCrashes { get; set; }
 
         /// <summary>
         /// Enter a username into the log-in form during activation of the Unity Editor.
@@ -221,7 +220,7 @@ namespace Cake.Unity
         /// <summary>
         /// Use this command line option to specify that APIUpdater should run when Unity is launched in batch mode. Omitting this command line argument when launching Unity in batch mode results in APIUpdater not running which can lead to compiler errors. Note that in versions prior to 2017.2 there’s no way to not run APIUpdater when Unity is launched in batch mode.
         /// </summary>
-        public bool AcceptAPIUpdate { get; set; } = false;
+        public bool AcceptAPIUpdate { get; set; }
 
         /// <summary>
         /// <para>Custom arguments which can further be processed in Unity Editor script by calling System.Environment.GetCommandLineArgs method. </para>
