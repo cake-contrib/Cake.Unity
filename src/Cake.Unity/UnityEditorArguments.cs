@@ -14,6 +14,11 @@ namespace Cake.Unity
         private readonly ExpandoObject customArguments = new ExpandoObject();
 
         /// <summary>
+        /// Force an update of the project in the Asset Server given by IP:port. The port is optional, and if not given it is assumed to be the standard one (10733). It is advisable to use this command in conjunction with the -projectPath argument to ensure you are working with the correct project. If you don’t give a project name, then the command line uses the last project opened by Unity. If no project exists at the path -projectPath gives, then the command line creates one automatically.
+        /// </summary>
+        public AssetServerUpdate AssetServerUpdate { get; set; }
+
+        /// <summary>
         /// <para>Run Unity in batch mode. You should always use this in conjunction with the other command line arguments, because it ensures no pop-up windows appear and eliminates the need for any human intervention. When an exception occurs during execution of the script code, the Asset server updates fail, or other operations fail, Unity immediately exits with return code 1. </para>
         /// <para>Note that in batch mode, Unity sends a minimal version of its log output to the console. However, the Log Files still contain the full log information. You cannot open a project in batch mode while the Editor has the same project open; only a single instance of Unity can run at a time. </para>
         /// <para>Tip: To check whether you are running the Editor or Standalone Player in batch mode, use the Application.isBatchMode operator. </para>
@@ -105,7 +110,7 @@ namespace Cake.Unity
         /// Export a package, given a path (or set of given paths). Asset paths are set relative to the Unity project root.
         /// Currently, this option only exports whole folders at a time. You normally need to use this command with the -projectPath argument.
         /// </summary>
-        public ExportPackageSettings ExportPackage { get; set; }
+        public ExportPackage ExportPackage { get; set; }
 
         /// <summary>
         /// Windows only. Make the Editor use Direct3D 11 for rendering. Normally the graphics API depends on Player settings(typically defaults to D3D11).
@@ -125,12 +130,12 @@ namespace Cake.Unity
         /// <summary>
         /// Make the Editor use OpenGL core profile for rendering.
         /// </summary>
-        public GLCoreVersion ForceGLCore { get; set; }
+        public ForceGLCore? ForceGLCore { get; set; }
 
         /// <summary>
         /// Windows only. Make the Editor use OpenGL for Embedded Systems for rendering.
         /// </summary>
-        public GLESVersion ForceGLES { get; set; }
+        public ForceGLES? ForceGLES { get; set; }
 
         /// <summary>
         /// Used with -force-glcoreXY to prevent checking for additional OpenGL extensions, allowing it to run between platforms with the same code paths.
@@ -200,7 +205,7 @@ namespace Cake.Unity
         /// <summary>
         /// Supported only on Android. Sets the default texture compression to the desired format before importing a texture or building the project. This is so you don’t have to import the texture again with the format you want.
         /// </summary>
-        public AndroidDefaultTextureFormat? SetDefaultPlatformTextureFormat { get; set; }
+        public SetDefaultPlatformTextureFormat? SetDefaultPlatformTextureFormat { get; set; }
 
         /// <summary>
         /// Prevent Unity from displaying the dialog that appears when a Standalone Player crashes. This argument is useful when you want to run the Player in automated builds or tests, where you don’t want a dialog prompt to obstruct automation.
@@ -258,6 +263,23 @@ namespace Cake.Unity
 
         internal ProcessArgumentBuilder CustomizeCommandLineArguments(ProcessArgumentBuilder builder, ICakeEnvironment environment)
         {
+            if (AssetServerUpdate != null)
+            {
+                builder.Append("-assetServerUpdate");
+                if (AssetServerUpdate.Port.HasValue)
+                    builder.Append(AssetServerUpdate.IP + ":" + AssetServerUpdate.Port.Value.ToString());
+                else
+                    builder.Append(AssetServerUpdate.IP);
+                builder.Append(AssetServerUpdate.ProjectName);
+                builder.Append(AssetServerUpdate.Username);
+                builder.Append(AssetServerUpdate.Password);
+                if (AssetServerUpdate.Revision != null)
+                {
+                    builder.Append("r");
+                    builder.Append(AssetServerUpdate.Revision);
+                }
+            }
+
             if (BatchMode)
                 builder
                     .Append("-batchmode");
@@ -342,12 +364,12 @@ namespace Cake.Unity
                     .Append("-executeMethod")
                     .Append(ExecuteMethod);
 
-            if (ExportPackage != null && ExportPackage.assetPaths != null && ExportPackage.packageName != null)
+            if (ExportPackage != null && ExportPackage.AssetPaths != null && ExportPackage.PackageName != null)
             {
                 builder.Append("-exportPackage");
-                foreach (var exportPackageAssetPath in ExportPackage.assetPaths)
+                foreach (var exportPackageAssetPath in ExportPackage.AssetPaths)
                     builder.AppendQuoted(exportPackageAssetPath);
-                builder.AppendQuoted(ExportPackage.packageName);
+                builder.AppendQuoted(ExportPackage.PackageName);
             }
 
             if (ForceD3D11)
@@ -359,11 +381,11 @@ namespace Cake.Unity
             if (ForceGfxMetal)
                 builder.Append("-force-gfx-metal");
 
-            if (ForceGLCore != null)
-                builder.Append("-force-glcore" + ForceGLCore.ToString());
+            if (ForceGLCore.HasValue)
+                builder.Append("-force-glcore" + ForceGLCore.Value.Render());
 
-            if (ForceGLES != null)
-                builder.Append("-force-gles" + ForceGLES.ToString());
+            if (ForceGLES.HasValue)
+                builder.Append("-force-gles" + ForceGLES.Value.Render());
 
             if (ForceClamped)
                 builder.Append("-force-clamped");

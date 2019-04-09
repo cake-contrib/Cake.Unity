@@ -1,6 +1,6 @@
 ﻿namespace Cake.Unity.Arguments
 {
-    public enum AndroidDefaultTextureFormat
+    public enum SetDefaultPlatformTextureFormat
     {
         dxt,
         pvrtc,
