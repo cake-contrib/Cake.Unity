@@ -2,12 +2,12 @@
 {
     public class AssetServerUpdate
     {
-        public string IP { get; set; }
-        public int? Port { get; set; }
-        public string ProjectName { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string Revision { get; set; }
+        public string IP { get; }
+        public int? Port { get; }
+        public string ProjectName { get; }
+        public string Username { get; }
+        public string Password { get; }
+        public string Revision { get; }
 
         public AssetServerUpdate(string ip, string projectName, string userName, string password)
         {
