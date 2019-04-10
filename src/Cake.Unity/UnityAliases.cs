@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Core;
@@ -7,8 +6,8 @@ using Cake.Core.Annotations;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Unity.Platforms;
+using Cake.Unity.SeekersOfEditors;
 using Cake.Unity.Version;
-using static Cake.Core.PlatformFamily;
 using static Cake.Unity.Version.UnityReleaseStage;
 
 namespace Cake.Unity
@@ -334,9 +333,6 @@ namespace Cake.Unity
         [CakeNamespaceImport("Cake.Unity.Version")]
         public static IReadOnlyCollection<UnityEditorDescriptor> FindUnityEditors(this ICakeContext context)
         {
-            if (context.Environment.Platform.Family != Windows)
-                throw new NotSupportedException("Cannot locate Unity Editors. Only Windows platform is supported.");
-
             if (unityEditorsCache != null)
             {
                 context.Log.Debug("Already searched for Unity Editors. Using cached results.");
@@ -345,7 +341,7 @@ namespace Cake.Unity
 
             return
                 unityEditorsCache =
-                    new SeekerOfEditors(context.Environment, context.Globber, context.Log)
+                    SeekerOfEditors.GetSeeker(context.Environment, context.Globber, context.Log)
                         .Seek();
         }
 
