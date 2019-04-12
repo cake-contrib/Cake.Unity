@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Linq;
+using System.Xml.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
@@ -12,45 +13,36 @@ namespace Cake.Unity.SeekersOfEditors
             : base(environment, globber, log)
         { }
 
-        protected override string SearchPattern => "/Applications/**/Unity.app/Contents/MacOS/Unity";
+        protected override string SearchPattern => "/Applications/**/Unity*.app/Contents/MacOS/Unity";
 
         protected override UnityVersion DetermineVersion(FilePath editorPath)
         {
             log.Debug($"Determining version of Unity Editor at path {editorPath}...");
 
-            var plistPath = editorPath.FullPath.Replace("MacOS/Unity", "Info.plist");
-            var lines = File.ReadAllLines(plistPath);
-            for (int i = 0; i < lines.Length; ++i)
+            var version = UnityVersionFromInfoPlist(editorPath);
+
+            if (version == null)
             {
-                if (lines[i].Contains("<key>CFBundleVersion</key>"))
-                {
-                    ++i;
-                    int pos1 = lines[i].IndexOf('>');
-                    int pos2 = lines[i].LastIndexOf('<');
-                    var version =
-                        lines[i].Substring(pos1 + 1, pos2 - pos1 - 1)
-                            .Split('.');
-                    int year = int.Parse(version[0]);
-                    int stream = int.Parse(version[1]);
-                    int charPos = FirstNotDigit(version[2]);
-                    int update = int.Parse(version[2].Substring(0, charPos));
-                    char suffixCharacter = version[2][charPos];
-                    int suffixNumber = int.Parse(version[2].Substring(charPos + 1));
-
-                    var unityVersion = new UnityVersion(year, stream, update, suffixCharacter, suffixNumber);
-                    log.Debug($"Result Unity Editor version (full): {unityVersion}");
-                    return unityVersion;
-                }
+                log.Debug($"Can't find UnityVersion for {editorPath}");
+                return null;
             }
-            return null;
+
+            var unityVersion = UnityVersion.Parse(version);
+
+            log.Debug($"Result Unity Editor version (full): {unityVersion}");
+            return unityVersion;
         }
 
-        private int FirstNotDigit(string str)
-        {
-            for (int i = 0; i < str.Length; ++i)
-                if (!char.IsDigit(str[i]))
-                    return i;
-            return -1;
-        }
+        private static string UnityVersionFromInfoPlist(FilePath editorPath) =>
+            XElement
+                .Load(PlistPath(editorPath))
+                .Descendants()
+                .SkipWhile((element) => element.Value != "CFBundleVersion")
+                .Skip(1)
+                .FirstOrDefault()
+                ?.Value;
+
+        private static string PlistPath(FilePath editorPath) =>
+            editorPath.FullPath.Replace("/MacOS/Unity", "/Info.plist");
     }
 }
