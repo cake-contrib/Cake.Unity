@@ -205,7 +205,7 @@ namespace Cake.Unity
         /// <summary>
         /// Supported only on Android. Sets the default texture compression to the desired format before importing a texture or building the project. This is so you don’t have to import the texture again with the format you want.
         /// </summary>
-        public SetDefaultPlatformTextureFormat? SetDefaultPlatformTextureFormat { get; set; }
+        public DefaultPlatformTextureFormat? SetDefaultPlatformTextureFormat { get; set; }
 
         /// <summary>
         /// Prevent Unity from displaying the dialog that appears when a Standalone Player crashes. This argument is useful when you want to run the Player in automated builds or tests, where you don’t want a dialog prompt to obstruct automation.
