@@ -1,50 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Unity.Version;
 
-namespace Cake.Unity
+namespace Cake.Unity.SeekersOfEditors
 {
-    internal class SeekerOfEditors
+    internal class WindowsSeekerOfEditors : SeekerOfEditors
     {
-        private readonly ICakeEnvironment environment;
-        private readonly IGlobber globber;
-        private readonly ICakeLog log;
-
-        public SeekerOfEditors(ICakeEnvironment environment, IGlobber globber, ICakeLog log)
-        {
-            this.environment = environment;
-            this.globber = globber;
-            this.log = log;
-        }
+        public WindowsSeekerOfEditors(ICakeEnvironment environment, IGlobber globber, ICakeLog log)
+            : base(environment, globber, log)
+        { }
 
         private string ProgramFiles => environment.GetSpecialPath(SpecialPath.ProgramFiles).FullPath;
+        protected override string SearchPattern => $"{ProgramFiles}/*Unity*/**/Editor/Unity.exe";
 
-        public IReadOnlyCollection<UnityEditorDescriptor> Seek()
-        {
-            var searchPattern = $"{ProgramFiles}/*Unity*/**/Editor/Unity.exe";
-
-            log.Debug("Searching for available Unity Editors...");
-            log.Debug("Search pattern: {0}", searchPattern);
-            var candidates = globber.GetFiles(searchPattern).ToList();
-
-            log.Debug("Found {0} candidates.", candidates.Count);
-            log.Debug(string.Empty);
-
-            var editors =
-                from candidatePath in candidates
-                let version = DetermineVersion(candidatePath)
-                where version != null
-                select new UnityEditorDescriptor(version, candidatePath);
-
-            return editors.ToList();
-        }
-
-        private UnityVersion DetermineVersion(FilePath editorPath)
+        protected override UnityVersion DetermineVersion(FilePath editorPath)
         {
             log.Debug("Determining version of Unity Editor at path {0}...", editorPath);
 

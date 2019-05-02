@@ -42,5 +42,26 @@ namespace Cake.Unity.Version
             SuffixCharacter.HasValue && SuffixNumber.HasValue
                 ? $"{Year}.{Stream}.{Update}{SuffixCharacter}{SuffixNumber}"
                 : $"{Year}.{Stream}.{Update}";
+
+        public static UnityVersion Parse(string s)
+        {
+            var version = s.Split('.');
+            int charPos = (int)FirstNotDigit(version[2]);
+
+            return new UnityVersion(
+                year: int.Parse(version[0]),
+                stream: int.Parse(version[1]),
+                update: int.Parse(version[2].Substring(0, charPos)),
+                suffixCharacter: version[2][charPos],
+                suffixNumber: int.Parse(version[2].Substring(charPos + 1)));
+        }
+
+        private static int? FirstNotDigit(string str)
+        {
+            for (int i = 0; i < str.Length; ++i)
+                if (!char.IsDigit(str[i]))
+                    return i;
+            return null;
+        }
     }
 }
