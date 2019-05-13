@@ -120,6 +120,120 @@ namespace Cake.Unity
         /// </summary>
         /// <param name="versionYear">Year part of Unity version aka major version.</param>
         /// <param name="versionStream">Stream part of Unity version aka minor version.</param>
+        /// <param name="versionUpdate">Update part of Unity version.</param>
+        /// <param name="versionSuffixCharacter">Stage part of Unity version. "a" - mean Alpha, "b" - Beta, "p" - Patch, "f" - Final</param>
+        /// <param name="versionSuffixNumber">SuffixNumber part of Unity version.</param>
+        /// <param name="arguments">Unity Editor command-line arguments.</param>
+        /// <param name="settings">Optional settings which affect how Unity Editor should be executed.</param>
+        /// <example>
+        /// <code>
+        /// UnityEditor(
+        ///     2018, 3, 14, 'f', 1,
+        ///     new UnityEditorArguments
+        ///     {
+        ///         ProjectPath = "A:/UnityProject",
+        ///         BuildWindowsPlayer = "A:/Build/game.exe",
+        ///         LogFile = "A:/Build/unity.log",
+        ///     },
+        ///     new UnityEditorSettings
+        ///     {
+        ///         RealTimeLog = true,
+        ///     });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Execute")]
+        [CakeNamespaceImport("Cake.Unity.Arguments")]
+        public static void UnityEditor(this ICakeContext context,
+            int versionYear, int versionStream, int versionUpdate, char versionSuffixCharacter, int versionSuffixNumber, UnityEditorArguments arguments, UnityEditorSettings settings = null) =>
+            new UnityEditor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log)
+                .Run(
+                    context.FindUnityEditor(versionYear, versionStream, versionUpdate, versionSuffixCharacter, versionSuffixNumber)
+                    ?? throw new Exception($"Failed to locate Unity Editor {versionYear}.{versionStream}.{versionUpdate}{versionSuffixCharacter}{versionSuffixNumber}. Try to specify it's path explicitly."),
+                    arguments,
+                    settings ?? new UnityEditorSettings());
+
+        /// <summary>
+        /// <para>Executes Unity Editor via command-line interface.</para>
+        /// <para>Determines Unity Editor location automatically by specified version.</para>
+        /// </summary>
+        /// <param name="versionYear">Year part of Unity version aka major version.</param>
+        /// <param name="versionStream">Stream part of Unity version aka minor version.</param>
+        /// <param name="versionUpdate">Update part of Unity version.</param>
+        /// <param name="versionSuffixCharacter">Stage part of Unity version. "a" - mean Alpha, "b" - Beta, "p" - Patch, "f" - Final</param>
+        /// <param name="arguments">Unity Editor command-line arguments.</param>
+        /// <param name="settings">Optional settings which affect how Unity Editor should be executed.</param>
+        /// <example>
+        /// <code>
+        /// UnityEditor(
+        ///     2018, 3, 14, 'f',
+        ///     new UnityEditorArguments
+        ///     {
+        ///         ProjectPath = "A:/UnityProject",
+        ///         BuildWindowsPlayer = "A:/Build/game.exe",
+        ///         LogFile = "A:/Build/unity.log",
+        ///     },
+        ///     new UnityEditorSettings
+        ///     {
+        ///         RealTimeLog = true,
+        ///     });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Execute")]
+        [CakeNamespaceImport("Cake.Unity.Arguments")]
+        public static void UnityEditor(this ICakeContext context,
+            int versionYear, int versionStream, int versionUpdate, char versionSuffixCharacter, UnityEditorArguments arguments, UnityEditorSettings settings = null) =>
+            new UnityEditor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log)
+                .Run(
+                    context.FindUnityEditor(versionYear, versionStream, versionUpdate, versionSuffixCharacter)
+                    ?? throw new Exception($"Failed to locate Unity Editor {versionYear}.{versionStream}.{versionUpdate}{versionSuffixCharacter}. Try to specify it's path explicitly."),
+                    arguments,
+                    settings ?? new UnityEditorSettings());
+
+        /// <summary>
+        /// <para>Executes Unity Editor via command-line interface.</para>
+        /// <para>Determines Unity Editor location automatically by specified version.</para>
+        /// </summary>
+        /// <param name="versionYear">Year part of Unity version aka major version.</param>
+        /// <param name="versionStream">Stream part of Unity version aka minor version.</param>
+        /// <param name="versionUpdate">Update part of Unity version.</param>
+        /// <param name="arguments">Unity Editor command-line arguments.</param>
+        /// <param name="settings">Optional settings which affect how Unity Editor should be executed.</param>
+        /// <example>
+        /// <code>
+        /// UnityEditor(
+        ///     2018, 3, 14,
+        ///     new UnityEditorArguments
+        ///     {
+        ///         ProjectPath = "A:/UnityProject",
+        ///         BuildWindowsPlayer = "A:/Build/game.exe",
+        ///         LogFile = "A:/Build/unity.log",
+        ///     },
+        ///     new UnityEditorSettings
+        ///     {
+        ///         RealTimeLog = true,
+        ///     });
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Execute")]
+        [CakeNamespaceImport("Cake.Unity.Arguments")]
+        public static void UnityEditor(this ICakeContext context,
+            int versionYear, int versionStream, int versionUpdate, UnityEditorArguments arguments, UnityEditorSettings settings = null) =>
+            new UnityEditor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log)
+                .Run(
+                    context.FindUnityEditor(versionYear, versionStream, versionUpdate)
+                    ?? throw new Exception($"Failed to locate Unity Editor {versionYear}.{versionStream}.{versionUpdate}. Try to specify it's path explicitly."),
+                    arguments,
+                    settings ?? new UnityEditorSettings());
+
+        /// <summary>
+        /// <para>Executes Unity Editor via command-line interface.</para>
+        /// <para>Determines Unity Editor location automatically by specified version.</para>
+        /// </summary>
+        /// <param name="versionYear">Year part of Unity version aka major version.</param>
+        /// <param name="versionStream">Stream part of Unity version aka minor version.</param>
         /// <param name="arguments">Unity Editor command-line arguments.</param>
         /// <param name="settings">Optional settings which affect how Unity Editor should be executed.</param>
         /// <example>
@@ -313,7 +427,114 @@ namespace Cake.Unity
                     version.Stream == stream
                 orderby
                     ReleaseStagePriority(version.Stage),
-                    version.Update descending
+                    version.Update descending,
+                    version.SuffixNumber descending
+                select editor
+            );
+
+        /// <summary>
+        /// <para>Locates installed Unity Editor by version (year, stream and update).</para>
+        /// <para>If more than one Unity Editor satisfies specified version, then latest one is returned.</para>
+        /// </summary>
+        /// <param name="year">Year part of Unity version aka major version.</param>
+        /// <param name="stream">Stream part of Unity version (aka minor version). Usually 1, 2 and 3 mean tech stream while 4 is long term support.</param>
+        /// <param name="update">Update part of Unity version.</param>
+        /// <returns>Descriptor of Unity Editor or null.</returns>
+        /// <example>
+        /// <code>
+        /// var editor = FindUnityEditor(2018, 3);
+        /// if (editor != null)
+        ///     Information("Found Unity Editor {0} at path {1}", editor.Version, editor.Path);
+        /// else
+        ///     Warning("Cannot find Unity Editor 2018.3");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Locate")]
+        [CakeNamespaceImport("Cake.Unity.Version")]
+        public static UnityEditorDescriptor FindUnityEditor(this ICakeContext context, int year, int stream, int update) =>
+            Enumerable.FirstOrDefault
+            (
+                from editor in context.FindUnityEditors()
+                let version = editor.Version
+                where
+                    version.Year == year &&
+                    version.Stream == stream &&
+                    version.Update == update
+                orderby
+                    ReleaseStagePriority(version.Stage),
+                    version.SuffixNumber descending
+                select editor
+            );
+
+        /// <summary>
+        /// <para>Locates installed Unity Editor by version (year, stream, update and stage).</para>
+        /// <para>If more than one Unity Editor satisfies specified version, then latest one is returned.</para>
+        /// </summary>
+        /// <param name="year">Year part of Unity version aka major version.</param>
+        /// <param name="stream">Stream part of Unity version (aka minor version). Usually 1, 2 and 3 mean tech stream while 4 is long term support.</param>
+        /// <param name="update">Update part of Unity version.</param>
+        /// <param name="suffixCharacter">Stage part of Unity version. "a" - mean Alpha, "b" - Beta, "p" - Patch, "f" - Final</param>
+        /// <returns>Descriptor of Unity Editor or null.</returns>
+        /// <example>
+        /// <code>
+        /// var editor = FindUnityEditor(2018, 3, 14, 'f');
+        /// if (editor != null)
+        ///     Information("Found Unity Editor {0} at path {1}", editor.Version, editor.Path);
+        /// else
+        ///     Warning("Cannot find Unity Editor 2018.3");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Locate")]
+        [CakeNamespaceImport("Cake.Unity.Version")]
+        public static UnityEditorDescriptor FindUnityEditor(this ICakeContext context, int year, int stream, int update, char suffixCharacter) =>
+            Enumerable.FirstOrDefault
+            (
+                from editor in context.FindUnityEditors()
+                let version = editor.Version
+                where
+                    version.Year == year &&
+                    version.Stream == stream &&
+                    version.Update == update &&
+                    version.SuffixCharacter == suffixCharacter
+                orderby
+                    version.SuffixNumber descending
+                select editor
+            );
+
+        /// <summary>
+        /// Locates installed Unity Editor by full version.
+        /// </summary>
+        /// <param name="year">Year part of Unity version aka major version.</param>
+        /// <param name="stream">Stream part of Unity version (aka minor version). Usually 1, 2 and 3 mean tech stream while 4 is long term support.</param>
+        /// <param name="update">Update part of Unity version.</param>
+        /// <param name="suffixCharacter">Stage part of Unity version. "a" - mean Alpha, "b" - Beta, "p" - Patch, "f" - Final</param>
+        /// <param name="suffixNumber">SuffixNumber part of Unity version.</param>
+        /// <returns>Descriptor of Unity Editor or null.</returns>
+        /// <example>
+        /// <code>
+        /// var editor = FindUnityEditor(2018, 3, 14, 'f', 1);
+        /// if (editor != null)
+        ///     Information("Found Unity Editor {0} at path {1}", editor.Version, editor.Path);
+        /// else
+        ///     Warning("Cannot find Unity Editor 2018.3");
+        /// </code>
+        /// </example>
+        [CakeMethodAlias]
+        [CakeAliasCategory("Locate")]
+        [CakeNamespaceImport("Cake.Unity.Version")]
+        public static UnityEditorDescriptor FindUnityEditor(this ICakeContext context, int year, int stream, int update, char suffixCharacter, int suffixNumber) =>
+            Enumerable.FirstOrDefault
+            (
+                from editor in context.FindUnityEditors()
+                let version = editor.Version
+                where
+                    version.Year == year &&
+                    version.Stream == stream &&
+                    version.Update == update &&
+                    version.SuffixCharacter == suffixCharacter &&
+                    version.SuffixNumber == suffixNumber
                 select editor
             );
 
