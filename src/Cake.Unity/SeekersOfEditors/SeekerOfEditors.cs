@@ -14,13 +14,13 @@ namespace Cake.Unity.SeekersOfEditors
         private readonly IGlobber globber;
         protected readonly ICakeLog log;
 
-        public static SeekerOfEditors GetSeeker(ICakeEnvironment environment, IGlobber globber, ICakeLog log)
+        public static SeekerOfEditors GetSeeker(ICakeEnvironment environment, IGlobber globber, ICakeLog log, IFileSystem fileSystem)
         {
             if (environment.Platform.Family == PlatformFamily.Windows)
                 return new WindowsSeekerOfEditors(environment, globber, log);
 
             if (environment.Platform.Family == PlatformFamily.OSX)
-                return new OSXSeekerOfEditors(environment, globber, log);
+                return new OSXSeekerOfEditors(environment, globber, log, fileSystem);
 
             throw new NotSupportedException("Cannot locate Unity Editors. Only Windows and OSX platform is supported.");
         }

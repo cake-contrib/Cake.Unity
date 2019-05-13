@@ -29,3 +29,20 @@ let ``Unity version without suffix should be in Unknown stage`` () =
 [<Test>]
 let ``Unity version with unknown suffix should be in Unknown stage`` () =
     (2022, 2, 2, 'x', 2) |> UnityVersion |> stage |> should equal UnityReleaseStage.Unknown
+
+
+[<Test>]
+let ``Parse UnityVersion from string`` () =
+
+    //arrange
+    let stringVersion = "2017.4.25f1"
+
+    //act
+    let unityVersion = UnityVersion.Parse(stringVersion)
+
+    //assert
+    unityVersion.Year |> should equal 2017
+    unityVersion.Stream |> should equal 4
+    unityVersion.Update |> should equal 25
+    unityVersion.SuffixCharacter |> should equal 'f'
+    unityVersion.SuffixNumber |> should equal 1

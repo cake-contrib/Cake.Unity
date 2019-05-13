@@ -341,7 +341,7 @@ namespace Cake.Unity
 
             return
                 unityEditorsCache =
-                    SeekerOfEditors.GetSeeker(context.Environment, context.Globber, context.Log)
+                    SeekerOfEditors.GetSeeker(context.Environment, context.Globber, context.Log, context.FileSystem)
                         .Seek();
         }
 
