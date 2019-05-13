@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.Diagnostics;
@@ -324,14 +325,44 @@ namespace Cake.Unity
         [CakeAliasCategory("Execute")]
         [CakeNamespaceImport("Cake.Unity.Arguments")]
         public static void UnityEditor(this ICakeContext context,
-            UnityEditorArguments arguments, UnityEditorSettings settings = null) =>
+            UnityEditorArguments arguments, UnityEditorSettings settings = null)
+        {
+            UnityEditorDescriptor unityEditor;
+
+            UnityVersion version = null;
+            if (arguments.ProjectPath != null)
+                version = context.GetUnityVersionFromProjectPath(arguments.ProjectPath);
+
+            if (version != null)
+            {
+                context.Log.Debug($"Detected Unity version from project: {version}, attempt to find UnityEditor.");
+                unityEditor = context.FindUnityEditor(version.Year, version.Stream, version.Update, version.SuffixCharacter.Value, version.SuffixNumber.Value);
+                if (unityEditor == null)
+                    unityEditor = context.FindUnityEditor(version.Year, version.Stream, version.Update, version.SuffixCharacter.Value);
+                if (unityEditor == null)
+                    unityEditor = context.FindUnityEditor(version.Year, version.Stream, version.Update);
+                if (unityEditor == null)
+                    unityEditor = context.FindUnityEditor(version.Year, version.Stream);
+                if (unityEditor == null)
+                    unityEditor = context.FindUnityEditor(version.Year);
+                if (unityEditor == null)
+                    throw new Exception("Failed to locate Unity Editor. Try to specify it's path explicitly.");
+                if (!unityEditor.Version.Equals(version))
+                    context.Log.Warning($"Can't locate Unity {version} exactly, using {unityEditor.Version} instead");
+            }
+            else
+            {
+                unityEditor = context.FindUnityEditor();
+                if (unityEditor == null)
+                    throw new Exception("Failed to locate Unity Editor. Try to specify it's path explicitly.");
+            }
+
             new UnityEditor(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools, context.Log)
                 .Run(
-                    context.FindUnityEditor()
-                    ?? throw new Exception("Failed to locate Unity Editor. Try to specify it's path explicitly."),
+                    unityEditor,
                     arguments,
                     settings ?? new UnityEditorSettings());
-
+        }
 
 
         /// <summary>
@@ -582,6 +613,25 @@ namespace Cake.Unity
 
                 default:
                     return 2;
+            }
+        }
+
+        private static UnityVersion GetUnityVersionFromProjectPath(this ICakeContext context, DirectoryPath projectPath)
+        {
+            try
+            {
+                var filePath = projectPath.GetFilePath("ProjectSettings/ProjectVersion.txt");
+                string version = context.FileSystem
+                    .GetFile(filePath)
+                    .ReadLines(Encoding.Default)
+                    .First()
+                    .Split(' ')
+                    [1].Trim();
+                return UnityVersion.Parse(version);
+            }
+            catch
+            {
+                return null;
             }
         }
     }
