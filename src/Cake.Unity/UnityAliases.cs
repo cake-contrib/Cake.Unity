@@ -335,7 +335,7 @@ namespace Cake.Unity
 
             if (version != null)
             {
-                context.Log.Debug($"Detected Unity version from project: {version}, attempt to find UnityEditor.");
+                context.Log.Information($"Detected Unity version from project: {version}, attempt to find UnityEditor.");
                 unityEditor = context.FindUnityEditor(version.Year, version.Stream, version.Update, version.SuffixCharacter.Value, version.SuffixNumber.Value);
                 if (unityEditor == null)
                     unityEditor = context.FindUnityEditor(version.Year, version.Stream, version.Update, version.SuffixCharacter.Value);
@@ -618,9 +618,10 @@ namespace Cake.Unity
 
         private static UnityVersion GetUnityVersionFromProjectPath(this ICakeContext context, DirectoryPath projectPath)
         {
+            context.Log.Debug($"try to specify unity version for project: {projectPath}");
             try
             {
-                var filePath = projectPath.GetFilePath("ProjectSettings/ProjectVersion.txt");
+                var filePath = projectPath.Combine("ProjectSettings").CombineWithFilePath("ProjectVersion.txt");
                 string version = context.FileSystem
                     .GetFile(filePath)
                     .ReadLines(Encoding.Default)
@@ -629,8 +630,9 @@ namespace Cake.Unity
                     [1].Trim();
                 return UnityVersion.Parse(version);
             }
-            catch
+            catch (Exception e)
             {
+                context.Log.Debug($"Can't determine unity version from project path, because: {e.Message}");
                 return null;
             }
         }
