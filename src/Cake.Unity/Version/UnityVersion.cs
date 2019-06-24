@@ -63,5 +63,12 @@ namespace Cake.Unity.Version
                     return i;
             return null;
         }
+
+        public bool Equals(UnityVersion other) =>
+            Year == other.Year &&
+            Stream == other.Stream &&
+            Update == other.Update &&
+            SuffixCharacter == other.SuffixCharacter &&
+            SuffixNumber == other.SuffixNumber;
     }
 }
