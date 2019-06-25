@@ -391,7 +391,8 @@ namespace Cake.Unity
                     ReleaseStagePriority(version.Stage),
                     version.Year descending,
                     version.Stream descending,
-                    version.Update descending
+                    version.Update descending,
+                    version.SuffixNumber descending
                 select editor
             );
 
@@ -424,7 +425,8 @@ namespace Cake.Unity
                 orderby
                     ReleaseStagePriority(version.Stage),
                     version.Stream descending,
-                    version.Update descending
+                    version.Update descending,
+                    version.SuffixNumber descending
                 select editor
             );
 
