@@ -34,11 +34,9 @@ namespace Cake.Unity.SeekersOfEditors
 
         public IReadOnlyCollection<UnityEditorDescriptor> Seek()
         {
-            var searchPattern = SearchPattern;
-
             log.Debug("Searching for available Unity Editors...");
-            log.Debug("Search pattern: {0}", searchPattern);
-            var candidates = globber.GetFiles(searchPattern).ToList();
+            log.Debug("Search patterns: [{0}]", string.Join(", ", SearchPatterns));
+            var candidates = GetCandidates(SearchPatterns);
 
             log.Debug("Found {0} candidates.", candidates.Count);
             log.Debug(string.Empty);
@@ -52,8 +50,11 @@ namespace Cake.Unity.SeekersOfEditors
             return editors.ToList();
         }
 
-        protected abstract string SearchPattern { get; }
+        protected abstract string[] SearchPatterns { get; }
 
         protected abstract UnityVersion DetermineVersion(FilePath editorPath);
+
+        private List<FilePath> GetCandidates(string[] searchPatterns) =>
+            searchPatterns.SelectMany(globber.GetFiles).ToList();
     }
 }

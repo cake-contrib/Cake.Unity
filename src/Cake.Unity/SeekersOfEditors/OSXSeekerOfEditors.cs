@@ -20,7 +20,7 @@ namespace Cake.Unity.SeekersOfEditors
             this.fileSystem = fileSystem;
         }
 
-        protected override string SearchPattern => "/Applications/**/Unity*.app/Contents/MacOS/Unity";
+        protected override string[] SearchPatterns => new[] {"/Applications/**/Unity*.app/Contents/MacOS/Unity"};
 
         protected override UnityVersion DetermineVersion(FilePath editorPath)
         {

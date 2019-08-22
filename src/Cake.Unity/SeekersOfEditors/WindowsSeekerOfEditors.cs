@@ -10,11 +10,16 @@ namespace Cake.Unity.SeekersOfEditors
     internal class WindowsSeekerOfEditors : SeekerOfEditors
     {
         public WindowsSeekerOfEditors(ICakeEnvironment environment, IGlobber globber, ICakeLog log)
-            : base(environment, globber, log)
-        { }
+            : base(environment, globber, log) { }
 
         private string ProgramFiles => environment.GetSpecialPath(SpecialPath.ProgramFiles).FullPath;
-        protected override string SearchPattern => $"{ProgramFiles}/*Unity*/**/Editor/Unity.exe";
+
+        protected override string[] SearchPatterns => new []
+        {
+            $"{ProgramFiles}/*Unity*/*/Editor/Unity.exe",
+            $"{ProgramFiles}/*Unity*/*/*/Editor/Unity.exe",
+            $"{ProgramFiles}/*Unity*/*/*/*/Editor/Unity.exe"
+        };
 
         protected override UnityVersion DetermineVersion(FilePath editorPath)
         {
