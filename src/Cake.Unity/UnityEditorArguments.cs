@@ -99,7 +99,7 @@ namespace Cake.Unity
         /// <summary>
         /// Path location to place the result file. If the path is a folder, the command line uses a default file name. If not specified, it places the results in the project’s root folder.
         /// </summary>
-        public FilePath TestResultsFile { get; set; }
+        public FilePath TestResults { get; set; }
 
         /// <summary>
         /// Execute the static method as soon as Unity opens the project, and after the optional Asset server update is complete. You can use this to do tasks such as continous integration, performing Unit Tests, making builds or preparing data. To return an error from the command line process, either throw an exception which causes Unity to exit with return code 1, or call EditorApplication.Exit with a non-zero return code. To pass parameters, add them to the command line and retrieve them inside the function using System.Environment.GetCommandLineArgs. To use -executeMethod, you need to place the enclosing script in an Editor folder. The method you execute must be defined as static.
@@ -122,6 +122,7 @@ namespace Cake.Unity
         /// </summary>
         public bool ForceDeviceIndex { get; set; }
 
+        /// <summary>
         /// <summary>
         /// MacOS only. Make the Editor use Metal as the default graphics API.
         /// </summary>
@@ -363,10 +364,10 @@ namespace Cake.Unity
                     .Append("-editorTestsFilter")
                     .Append(EditorTestsFilter);
 
-            if (TestResultsFile != null)
+            if (TestResults != null)
                 builder
                     .Append("-testResults")
-                    .AppendQuoted(TestResultsFile.MakeAbsolute(environment).FullPath);
+                    .AppendQuoted(TestResults.MakeAbsolute(environment).FullPath);
 
             if (ExecuteMethod != null)
                 builder
