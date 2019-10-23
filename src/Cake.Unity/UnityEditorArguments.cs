@@ -123,7 +123,6 @@ namespace Cake.Unity
         public bool ForceDeviceIndex { get; set; }
 
         /// <summary>
-        /// <summary>
         /// MacOS only. Make the Editor use Metal as the default graphics API.
         /// </summary>
         public bool ForceGfxMetal { get; set; }
