@@ -99,7 +99,7 @@ namespace Cake.Unity
         /// <summary>
         /// Path location to place the result file. If the path is a folder, the command line uses a default file name. If not specified, it places the results in the project’s root folder.
         /// </summary>
-        public FilePath EditorTestsResultFile { get; set; }
+        public FilePath TestResults { get; set; }
 
         /// <summary>
         /// Execute the static method as soon as Unity opens the project, and after the optional Asset server update is complete. You can use this to do tasks such as continous integration, performing Unit Tests, making builds or preparing data. To return an error from the command line process, either throw an exception which causes Unity to exit with return code 1, or call EditorApplication.Exit with a non-zero return code. To pass parameters, add them to the command line and retrieve them inside the function using System.Environment.GetCommandLineArgs. To use -executeMethod, you need to place the enclosing script in an Editor folder. The method you execute must be defined as static.
@@ -193,9 +193,14 @@ namespace Cake.Unity
         public bool ReturnLicense { get; set; }
 
         /// <summary>
-        /// Run Editor tests from the project. This argument requires the projectPath, and it’s good practice to run it with batchmode argument. quit is not required, because the Editor automatically closes down after the run is finished.
+        /// Run all your test by your TestPlatform;
         /// </summary>
-        public bool RunEditorTests { get; set; }
+        public bool RunTests { get; set; }
+
+        /// <summary>
+        /// Allows the selection of an active test platform.
+        /// </summary>
+        public TestPlatform? TestPlatform { get; set; }
 
         /// <summary>
         /// Activate Unity with the specified serial key. It is good practice to pass the -batchmode and -quit arguments as well, in order to quit Unity when done, if using this for automated activation of Unity. Please allow a few seconds before the license file is created, because Unity needs to communicate with the license server. Make sure that license file folder exists, and has appropriate permissions before running Unity with this argument. If activation fails, see the Editor.log for info.
@@ -263,6 +268,10 @@ namespace Cake.Unity
 
         internal ProcessArgumentBuilder CustomizeCommandLineArguments(ProcessArgumentBuilder builder, ICakeEnvironment environment)
         {
+            if (Quit && RunTests)
+                throw new Exception(
+                    $"Unable to start unit testing if argument {nameof(Quit)} is true.\nPlease set {nameof(Quit)} or {nameof(RunTests)} to false");
+
             if (AssetServerUpdate != null)
             {
                 builder.Append("-assetServerUpdate");
@@ -354,10 +363,10 @@ namespace Cake.Unity
                     .Append("-editorTestsFilter")
                     .Append(EditorTestsFilter);
 
-            if (EditorTestsResultFile != null)
+            if (TestResults != null)
                 builder
-                    .Append("-editorTestsResultFile")
-                    .AppendQuoted(EditorTestsResultFile.MakeAbsolute(environment).FullPath);
+                    .Append("-testResults")
+                    .AppendQuoted(TestResults.MakeAbsolute(environment).FullPath);
 
             if (ExecuteMethod != null)
                 builder
@@ -429,8 +438,13 @@ namespace Cake.Unity
             if (ReturnLicense)
                 builder.Append("-returnlicense");
 
-            if (RunEditorTests && ProjectPath != null)
-                builder.Append("-runEditorTests");
+            if (RunTests && ProjectPath != null)
+                builder.Append("-runTests");
+
+            if (RunTests && TestPlatform.HasValue)
+                builder
+                    .Append("-testPlatform")
+                    .Append(TestPlatform.Value.ToString());
 
             if (Serial != null)
                 builder

@@ -7,11 +7,12 @@
     <owners>patriksvensson, cake-contrib, kolesnick</owners>
     <description>Cake Unity AddIn.</description>
     <summary>Cake AddIn that extends Cake with ability to execute the Unity Editor as a command line utility.</summary>
-    <licenseUrl>https://github.com/cake-contrib/Cake.Unity/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/cake-contrib/Cake.Unity/</projectUrl>
     <iconUrl>https://cdn.jsdelivr.net/gh/cake-contrib/graphics/png/cake-contrib-medium.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <copyright>Copyright (c) Cake Contributions 2014 - Present</copyright>
+    <license type="expression">MIT</license>
+    <repository type="git" url="https://github.com/cake-contrib/Cake.Unity.git"/>
     <tags>Cake, Script, Build, Unity</tags>
   </metadata>
   <files>
