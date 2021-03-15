@@ -10,7 +10,6 @@
 
 # Build related
 tools/**
-!tools/packages.config
 BuildArtifacts/
 
 # mstest test results

@@ -1,4 +1,4 @@
-#load nuget:?package=Cake.Recipe&version=1.0.0
+#load nuget:?package=Cake.Recipe&version=2.2.0
 
 Environment.SetVariableNames();
 
@@ -8,8 +8,7 @@ BuildParameters.SetParameters(context: Context,
                             title: "Cake.Unity",
                             repositoryOwner: "cake-contrib",
                             repositoryName: "Cake.Unity",
-                            appVeyorAccountName: "cakecontrib",
-                            shouldRunGitVersion: true);
+                            appVeyorAccountName: "cakecontrib");
 
 BuildParameters.PrintParameters(Context);
 
@@ -18,8 +17,9 @@ ToolSettings.SetToolSettings(context: Context,
                             {
                                 BuildParameters.RootDirectoryPath + "/src/Cake.Unity/obj/**/*.*",
                                 BuildParameters.RootDirectoryPath + "/src/Cake.Unity.Tests/**/*.cs",
+                                BuildParameters.RootDirectoryPath + "/src/Cake.Unity.FSharp.Tests/**/*.fs",
                             },
-                            testCoverageFilter: "+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]* ",
+                            testCoverageFilter: "+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]*",
                             testCoverageExcludeByAttribute: "*.ExcludeFromCodeCoverage*",
                             testCoverageExcludeByFile: "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs");
 
