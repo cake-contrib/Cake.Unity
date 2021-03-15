@@ -17,8 +17,9 @@ ToolSettings.SetToolSettings(context: Context,
                             {
                                 BuildParameters.RootDirectoryPath + "/src/Cake.Unity/obj/**/*.*",
                                 BuildParameters.RootDirectoryPath + "/src/Cake.Unity.Tests/**/*.cs",
+                                BuildParameters.RootDirectoryPath + "/src/Cake.Unity.FSharp.Tests/**/*.fs",
                             },
-                            testCoverageFilter: "+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]* ",
+                            testCoverageFilter: "+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]*",
                             testCoverageExcludeByAttribute: "*.ExcludeFromCodeCoverage*",
                             testCoverageExcludeByFile: "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs");
 
