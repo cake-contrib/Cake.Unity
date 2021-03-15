@@ -1,5 +1,4 @@
-﻿using Cake.Core.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Cake.Core.IO;
 using Cake.Core;
