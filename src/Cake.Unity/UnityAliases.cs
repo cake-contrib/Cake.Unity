@@ -6,7 +6,6 @@ using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
-using Cake.Unity.Platforms;
 using Cake.Unity.SeekersOfEditors;
 using Cake.Unity.Version;
 using static Cake.Unity.Version.UnityReleaseStage;
@@ -17,17 +16,6 @@ namespace Cake.Unity
     public static class UnityAliases
     {
         private static IReadOnlyCollection<UnityEditorDescriptor> unityEditorsCache;
-
-        [CakeMethodAlias]
-        [CakeAliasCategory("Build (Obsolete)")]
-        [CakeNamespaceImport("Cake.Unity.Platforms")]
-        public static void UnityBuild(this ICakeContext context, DirectoryPath projectPath, UnityPlatform platform)
-        {
-            var tool = new UnityRunner(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            tool.Run(context, projectPath, platform);
-        }
-
-
 
         /// <summary>
         /// Executes Unity Editor via command-line interface.

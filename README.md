@@ -63,28 +63,3 @@ Task("Default")
 
 RunTarget("Default");
 ```
-
-Older API Example
--------
-
-```csharp
-#r "tools/Cake.Unity.dll"
-
-Task("Build")
-	.Description("Builds the game.")
-	.Does(() =>
-{
-	var projectPath = @"C:\Project\UnityGame";
-	var outputPath = @"C:\Output\Game.exe";
-
-	// Build for Windows (x86)
-	UnityBuild(projectPath, new WindowsPlatform(outputPath) {
-		NoGraphics = true });
-
-	// Build for Windows (x64)
-	UnityBuild(projectPath, new WindowsPlatform(outputPath) {
-		PlatformTarget = UnityPlatformTarget.x64 });
-});
-
-RunTarget("Build");
-```

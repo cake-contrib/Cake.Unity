@@ -19,6 +19,8 @@ branches:
   # Whitelist
   only:
     - develop
+    - /feature/.*/
+    - /bugfix/.*/
     - master
     - /release/.*/
     - /hotfix/.*/
