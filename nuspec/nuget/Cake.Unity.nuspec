@@ -3,8 +3,8 @@
   <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <id>Cake.Unity</id>
     <version>0.0.0</version>
-    <authors>Patrik Svensson, Anatoliy Kolesnick</authors>
-    <owners>patriksvensson, cake-contrib, kolesnick</owners>
+    <authors>Anatoliy Kolesnick</authors>
+    <owners>kolesnick, cake-contrib</owners>
     <description>Cake Unity AddIn.</description>
     <summary>Cake AddIn that extends Cake with ability to execute the Unity Editor as a command line utility.</summary>
     <projectUrl>https://github.com/cake-contrib/Cake.Unity/</projectUrl>
