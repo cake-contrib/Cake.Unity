@@ -475,8 +475,7 @@ namespace Cake.Unity
                 builder.Append("-accept-apiupdate");
 
             foreach (var customArgument in customArguments)
-                builder
-                    .Append($"--{customArgument.Key}={customArgument.Value}");
+                builder.AppendQuoted($"--{customArgument.Key}={customArgument.Value}");
 
             return builder;
         }
