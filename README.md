@@ -3,8 +3,7 @@ Cake.Unity
 
 Unity build support for [Cake](https://github.com/cake-build/cake).
 
-This is currently a work in progress and only supports building for Windows.   
-The API is not in any way final and will change.
+More documentation [can be found here](https://cakebuild.net/dsl/unity/).
 
 Examples
 -------
