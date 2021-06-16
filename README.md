@@ -3,8 +3,7 @@ Cake.Unity
 
 Unity build support for [Cake](https://github.com/cake-build/cake).
 
-This is currently a work in progress and only supports building for Windows.   
-The API is not in any way final and will change.
+More documentation [can be found here](https://cakebuild.net/dsl/unity/).
 
 Examples
 -------
@@ -62,29 +61,4 @@ Task("Default")
     .IsDependentOn("Find-Latest-Unity-Editor");
 
 RunTarget("Default");
-```
-
-Older API Example
--------
-
-```csharp
-#r "tools/Cake.Unity.dll"
-
-Task("Build")
-	.Description("Builds the game.")
-	.Does(() =>
-{
-	var projectPath = @"C:\Project\UnityGame";
-	var outputPath = @"C:\Output\Game.exe";
-
-	// Build for Windows (x86)
-	UnityBuild(projectPath, new WindowsPlatform(outputPath) {
-		NoGraphics = true });
-
-	// Build for Windows (x64)
-	UnityBuild(projectPath, new WindowsPlatform(outputPath) {
-		PlatformTarget = UnityPlatformTarget.x64 });
-});
-
-RunTarget("Build");
 ```
