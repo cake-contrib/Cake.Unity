@@ -22,7 +22,10 @@ namespace Cake.Unity.SeekersOfEditors
             if (environment.Platform.Family == PlatformFamily.OSX)
                 return new OSXSeekerOfEditors(environment, globber, log, fileSystem);
 
-            throw new NotSupportedException("Cannot locate Unity Editors. Only Windows and OSX platform is supported.");
+            if (environment.Platform.Family == PlatformFamily.Linux)
+                return new LinuxSeekerOfEditors(environment, globber, log, fileSystem);
+
+            throw new NotSupportedException("Cannot locate Unity Editors. Only Windows, OSX and Linux is supported.");
         }
 
         protected SeekerOfEditors(ICakeEnvironment environment, IGlobber globber, ICakeLog log)
