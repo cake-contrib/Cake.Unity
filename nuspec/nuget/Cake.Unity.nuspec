@@ -19,8 +19,5 @@
     <file src="netstandard2.0/Cake.Unity.dll" target="lib/netstandard2.0" />
     <file src="netstandard2.0/Cake.Unity.pdb" target="lib/netstandard2.0" />
     <file src="netstandard2.0/Cake.Unity.xml" target="lib/netstandard2.0" />
-    <file src="net46/Cake.Unity.dll" target="lib/net46" />
-    <file src="net46/Cake.Unity.pdb" target="lib/net46" />
-    <file src="net46/Cake.Unity.xml" target="lib/net46" />
   </files>
 </package>
