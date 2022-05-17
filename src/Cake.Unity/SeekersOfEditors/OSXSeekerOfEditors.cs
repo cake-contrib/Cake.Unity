@@ -1,13 +1,11 @@
 ﻿using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Unity.Version;
 
-[assembly: InternalsVisibleTo("Cake.Unity.FSharp.Tests")]
 namespace Cake.Unity.SeekersOfEditors
 {
     internal class OSXSeekerOfEditors : SeekerOfEditors
@@ -20,7 +18,7 @@ namespace Cake.Unity.SeekersOfEditors
             this.fileSystem = fileSystem;
         }
 
-        protected override string[] SearchPatterns => new[] {"/Applications/**/Unity*.app/Contents/MacOS/Unity"};
+        protected override string[] SearchPatterns => new[] {"/Applications/Unity/Hub/Editor/*/Unity.app/Contents/MacOS/Unity"};
 
         protected override UnityVersion DetermineVersion(FilePath editorPath)
         {

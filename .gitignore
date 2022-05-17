@@ -7,6 +7,7 @@
 [Bb]uild/
 *.sln.ide/
 /src/.vs
+/src/.idea
 
 # Build related
 tools/**
