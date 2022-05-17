@@ -4,10 +4,12 @@
     <TargetFramework>net6.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RootNamespace>Cake.Unity.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Cake.Core" Version="1.0.0" />
+    <PackageReference Include="Cake.Testing" Version="1.0.0" />
     <PackageReference Include="FSharp.Interop.Dynamic" Version="4.0.3.130" />
     <PackageReference Include="FsUnit" Version="3.4.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
@@ -18,6 +20,7 @@
     <Compile Include="InfoPlistParserTests.fs" />
     <Compile Include="UnityEditorArgumentsTests.fs" />
     <Compile Include="UnityVersionTests.fs" />
+    <Compile Include="OSXSeekerOfEditorsTests.fs" />
   </ItemGroup>
 
   <ItemGroup>
