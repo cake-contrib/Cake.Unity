@@ -233,6 +233,11 @@ namespace Cake.Unity
         public bool AcceptAPIUpdate { get; set; }
 
         /// <summary>
+        /// Enables release code optimization mode, overriding the current default code optimization mode for the session.
+        /// </summary>
+        public bool ReleaseCodeOptimization { get; set; }
+
+        /// <summary>
         /// <para>Custom arguments which can further be processed in Unity Editor script by calling System.Environment.GetCommandLineArgs method. </para>
         /// <para>They are supplied among other arguments in format "--key=value". </para>
         /// <para>Expected to be used in conjunction with ExecuteMethod argument. </para>
@@ -473,6 +478,9 @@ namespace Cake.Unity
 
             if (AcceptAPIUpdate)
                 builder.Append("-accept-apiupdate");
+
+            if (ReleaseCodeOptimization)
+                builder.Append("-releaseCodeOptimization");
 
             foreach (var customArgument in customArguments)
                 builder.AppendQuoted($"--{customArgument.Key}={customArgument.Value}");

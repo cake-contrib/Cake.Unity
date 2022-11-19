@@ -21,9 +21,17 @@ let setExecuteMethod value (arguments : UnityEditorArguments) =
     arguments.ExecuteMethod <- value
     arguments
 
+let setReleaseCodeOptimization value (arguments : UnityEditorArguments) =
+    arguments.ReleaseCodeOptimization <- value
+    arguments
+
 [<Test>]
 let ``CLI arguments with enabled BatchMode should contain "-batchmode"`` () =
     () |> UnityEditorArguments |> setBatchMode true |> commandLineArguments |> should haveSubstring "-batchmode"
+
+[<Test>]
+let ``CLI arguments with release code optimization should contain "-releaseCodeOptimization"`` () =
+    () |> UnityEditorArguments |> setReleaseCodeOptimization true |> commandLineArguments |> should haveSubstring "-releaseCodeOptimization"
 
 [<Test>]
 let ``CLI arguments with custom argument "age" of value 18 should contain "--age=18"`` () =
