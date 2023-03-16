@@ -337,12 +337,12 @@ namespace Cake.Unity
             {
                 builder
                     .Append("-buildTarget")
-                    .AppendQuoted(CustomBuildTarget);
+                    .Append(CustomBuildTarget);
             }
 
             if (CustomBuildTarget != null && BuildTarget.HasValue)
             {
-                throw new Exception("Providing both BuildTarget and CustomBuildTarget is not supported.");
+                throw new ArgumentException("Providing both BuildTarget and CustomBuildTarget is not supported.");
             }
 
             if (BuildWindowsPlayer != null)
