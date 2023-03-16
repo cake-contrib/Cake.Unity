@@ -61,6 +61,11 @@ namespace Cake.Unity
         public BuildTarget? BuildTarget { get; set; }
 
         /// <summary>
+        /// Allows the selection of an active build target before loading a project (with string).
+        /// </summary>
+        public string CustomBuildTarget { get; set; }
+
+        /// <summary>
         /// Build a 32-bit standalone Windows player (for example, -buildWindowsPlayer path/to/your/build.exe).
         /// </summary>
         public FilePath BuildWindowsPlayer { get; set; }
@@ -327,6 +332,18 @@ namespace Cake.Unity
                 builder
                     .Append("-buildTarget")
                     .Append(BuildTarget.Value.ToString());
+
+            if (CustomBuildTarget != null)
+            {
+                builder
+                    .Append("-buildTarget")
+                    .Append(CustomBuildTarget);
+            }
+
+            if (CustomBuildTarget != null && BuildTarget.HasValue)
+            {
+                throw new ArgumentException("Providing both BuildTarget and CustomBuildTarget is not supported.");
+            }
 
             if (BuildWindowsPlayer != null)
                 builder

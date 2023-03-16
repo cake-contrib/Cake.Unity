@@ -1,5 +1,7 @@
 ﻿module Cake.Unity.Tests.UnityEditorArgumentsTests
 
+open System
+open Cake.Unity.Arguments
 open FSharp.Interop.Dynamic
 open FsUnit.TopLevelOperators
 open NUnit.Framework
@@ -20,6 +22,11 @@ let setBatchMode value (arguments : UnityEditorArguments) =
 let setExecuteMethod value (arguments : UnityEditorArguments) =
     arguments.ExecuteMethod <- value
     arguments
+
+let setCustomBuildTarget value (arguments : UnityEditorArguments) =
+    arguments.CustomBuildTarget <- value
+    arguments
+
 
 [<Test>]
 let ``CLI arguments with enabled BatchMode should contain "-batchmode"`` () =
@@ -48,3 +55,8 @@ let ``default BatchMode value should be true`` () =
 [<Test>]
 let ``default Quit value should be true`` () =
     UnityEditorArguments().Quit |> should equal true
+
+[<Test>]
+let ``CLI arguments with Custom argument "CustomBuildTarget" of value "PS5" should contain "-buildTarget PS5"`` () =
+    () |> UnityEditorArguments |> setCustomBuildTarget "PS5" |> commandLineArguments |> should haveSubstring "-buildTarget PS5"
+

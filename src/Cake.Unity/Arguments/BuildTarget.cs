@@ -23,5 +23,10 @@
         N3DS,
         tvOS,
         PSM,
+
+        GameCoreXboxSeries,
+        GameCoreXboxOne,
+        GameCoreScarlett,
+        PS5,
     }
 }
