@@ -284,7 +284,7 @@ namespace Cake.Unity
         /// </code>
         /// </example>
         public Action<dynamic> SetCustomSingleDashArguments { set => value.Invoke(сustomSingleDashArguments); }
-        private dynamic сustomSingleDashArguments;
+        private readonly ExpandoObject сustomSingleDashArguments = new ExpandoObject();
 
         internal ProcessArgumentBuilder CustomizeCommandLineArguments(ProcessArgumentBuilder builder, ICakeEnvironment environment)
         {
