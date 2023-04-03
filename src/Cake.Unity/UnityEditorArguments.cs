@@ -265,6 +265,26 @@ namespace Cake.Unity
         /// </code>
         /// </example>
         public Action<dynamic> SetCustomArguments { set => value.Invoke(customArguments); }
+        
+        /// <summary>
+        /// <para>Custom arguments that are supplied among other arguments in format "-key=value". </para>
+        /// <para>Usefull for third-party builders or tools that required arguments with only singe dash in command line befor argument name</para>
+        /// <para>Expected to be used in conjunction with ExecuteMethod argument. </para>
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// new UnityEditorArguments
+        /// {
+        ///     ExecuteMethod = "Build.RunCommandLineBuild",
+        ///     SetCustomSingleDashArguments = x =>
+        ///     {
+        ///         x.headlessPath = "./";
+        ///     },
+        /// };
+        /// </code>
+        /// </example>
+        public Action<dynamic> SetCustomSingleDashArguments { set => value.Invoke(сustomSingleDashArguments); }
+        private dynamic сustomSingleDashArguments;
 
         internal ProcessArgumentBuilder CustomizeCommandLineArguments(ProcessArgumentBuilder builder, ICakeEnvironment environment)
         {
@@ -476,6 +496,9 @@ namespace Cake.Unity
 
             foreach (var customArgument in customArguments)
                 builder.AppendQuoted($"--{customArgument.Key}={customArgument.Value}");
+            
+            foreach (var сustomSingleDashArgument in сustomSingleDashArguments)
+                builder.AppendQuoted($"-{сustomSingleDashArgument.Key}={сustomSingleDashArgument.Value}");
 
             return builder;
         }
