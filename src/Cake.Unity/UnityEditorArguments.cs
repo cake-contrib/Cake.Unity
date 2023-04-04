@@ -267,7 +267,7 @@ namespace Cake.Unity
         public Action<dynamic> SetCustomArguments { set => value.Invoke(customArguments); }
         
         /// <summary>
-        /// <para>Custom arguments that are supplied among other arguments in format "-key=value". </para>
+        /// <para>Custom arguments that are supplied among other arguments in format "-key value". </para>
         /// <para>Usefull for third-party builders or tools that required arguments with only singe dash in command line befor argument name</para>
         /// <para>Expected to be used in conjunction with ExecuteMethod argument. </para>
         /// </summary>
@@ -498,7 +498,7 @@ namespace Cake.Unity
                 builder.AppendQuoted($"--{customArgument.Key}={customArgument.Value}");
             
             foreach (var сustomSingleDashArgument in сustomSingleDashArguments)
-                builder.AppendQuoted($"-{сustomSingleDashArgument.Key}={сustomSingleDashArgument.Value}");
+                builder.AppendQuoted($"-{сustomSingleDashArgument.Key} {сustomSingleDashArgument.Value}");
 
             return builder;
         }
